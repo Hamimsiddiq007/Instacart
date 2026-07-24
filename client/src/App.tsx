@@ -11,6 +11,7 @@ import Checkout from "./pages/Checkout"
 import MyOrders from "./pages/MyOrders"
 import OrderTracking from "./pages/OrderTracking"
 import Address from "./pages/Address"
+import ProtectedRoute from "./components/ProtectedRoute"
 
 
 const App = () => {
@@ -31,7 +32,7 @@ const App = () => {
         <Route path="deals" element={<FlashDeals />} />
 
         {/* Protected routes */}
-        <Route>
+        <Route element={<ProtectedRoute/>}>
           <Route path="checkout" element={<Checkout />} />
           <Route path="orders" element={<MyOrders />} />
           <Route path="orders/:id" element={<OrderTracking />} />
