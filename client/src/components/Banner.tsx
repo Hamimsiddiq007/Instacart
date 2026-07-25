@@ -1,3 +1,4 @@
+import { TruckIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 
 const Banner = () => {
@@ -14,8 +15,16 @@ const Banner = () => {
   return (
     <div>
       {bannerVisible && (
-        <div className="">
-          
+        <div className="bg-linear-to-r from-app-green via-emerald-800 to-app-green text-white text-xs sm:text-sm relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-center gap-6">
+            <div className="flex-center gap-2">
+              <TruckIcon className="size-4 shrink-0" />
+              <span className="font-medium">Free delivery on orders above $20</span>
+            </div>
+          </div>
+          <button onClick={dismissBanner} className="absolute right-2 top-1/2 -translate-y-1/2 p-1 hover:bg-white/10 rounded-full transition-colors">
+            <XIcon className="size-3.5" />
+          </button>
         </div>
       )}
     </div>
