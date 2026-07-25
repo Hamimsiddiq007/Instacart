@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { heroSectionData } from "../assets/assets";
 import { Link } from "react-router-dom";
-import { BikeIcon, UserIcon } from "lucide-react";
+import { BikeIcon, LockIcon, MailIcon, UserIcon } from "lucide-react";
 
 const Login = () => {
   const [loginState, setLoginState] = useState(true);
@@ -80,6 +80,34 @@ const Login = () => {
                 </div>
               </label>
             )}
+            <label className="text-sm flex flex-col gap-1">
+                Email Address
+                <div className="relative">
+                  <MailIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-app-text-light" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    placeholder="you@example.com"
+                    className="w-full pl-11 pr-4 py-3 text-sm bg-white rounded-xl border not-focus:border-app-border transition-all"
+                  />
+                </div>
+              </label>
+              <label className="text-sm flex flex-col gap-1">
+                Password
+                <div className="relative">
+                  <LockIcon className="absolute left-3.5 top-1/2 -translate-y-1/2 size-4 text-app-text-light" />
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    placeholder="•••••••••••••"
+                    className="w-full pl-11 pr-4 py-3 text-sm bg-white rounded-xl border not-focus:border-app-border transition-all"
+                  />
+                </div>
+              </label>
           </form>
         </div>
       </div>
