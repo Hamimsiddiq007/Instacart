@@ -1,4 +1,4 @@
-import { BikeIcon, SearchIcon } from "lucide-react";
+import { BikeIcon, SearchIcon, ShoppingCartIcon } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -44,6 +44,14 @@ const Navbar = () => {
                     value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="w-full pl-8 p-2 bg-orange-50 rounded-full ring ring-app-orange/15 focus:ring-app-orange/30" />
                 </div>
             </form>
+
+            {/* Right action */}
+            <div className="flex items-center gap-3">
+                <button className="relative p-2 rounded-xl" onClick={() => setIsCartOpen(true)}>
+                    <ShoppingCartIcon className="size-5 text-zinc-900" />
+                    {cartCount > 0 && <span className="absolute -top-1 -right-1 size-4 bg-app-orange text-white text-[10px] rounded-full flex-center">{cartCount}</span>}
+                </button>
+            </div>
         </div>
       </div>
     </nav>
