@@ -17,11 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
-  const user: any = {
-    name: "Avinash",
-    email: "admin@example.com",
-    isAdmin: true,
-  };
+  const user: any = null
   const { cartCount, setIsCartOpen } = {
     cartCount: 5,
     setIsCartOpen: (_data: any) => {},
@@ -37,6 +33,11 @@ const Navbar = () => {
         navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
         setSearchQuery('');
     }
+  }
+
+  const handleLogout = () => {
+    setUserManuOpen(false);
+    navigate('/')
   }
 
   return (
@@ -141,7 +142,7 @@ const Navbar = () => {
                             )}
                             {user && (
                                 <div className="border-t border-app-border pt-1">
-                                    <button className="flex items-center gap-3 px-4 py-2.5 text-sm text-app-error hover:bg-red-50 w-full transition-colors">
+                                    <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-2.5 text-sm text-app-error hover:bg-red-50 w-full transition-colors">
                                         <LogOutIcon size={16}/> Logout
                                     </button>
                                 </div>
