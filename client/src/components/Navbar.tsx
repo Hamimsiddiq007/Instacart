@@ -28,6 +28,15 @@ const Navbar = () => {
           <BikeIcon size={24} className="" />
           <span>Instacart</span>
         </Link>
+
+        <div className="w-full flex items-center justify-end gap-4 lg:gap-10">
+            {/* Navlink - Desktop */}
+            <div className="hidden md:flex items-center gap-6 text-sm text-zinc-600">
+                <Link to="/">Home</Link>
+                <Link to="/products">Products</Link>
+                <Link to="/deals" className="text-orange-500">Deals</Link>
+            </div>
+        </div>
       </div>
     </nav>
   );
