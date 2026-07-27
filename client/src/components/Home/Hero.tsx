@@ -1,5 +1,6 @@
-import { LeafIcon } from "lucide-react"
+import { ArrowRightIcon, LeafIcon } from "lucide-react"
 import { heroSectionData } from "../../assets/assets"
+import { Link } from "react-router-dom"
 
 
 const Hero = () => {
@@ -16,6 +17,14 @@ const Hero = () => {
                 Nourish your home with <span className="text-orange-300">Earth's finest</span>
             </h1>
             <p className="text-base text-white/70 leading-relaxed mb-8 max-w-md">{heroSectionData.description}</p>
+            <div className="flex flex-wrap gap-3">
+                <Link to='/products' className="px-7 py-3 bg-orange-400 text-white font-semibold rounded-full hover:bg-orange-500 transition-all flex-center gap-2 active:scale-[0.98]">
+                    Shop Now <ArrowRightIcon className="size-4" />
+                </Link>
+                <Link to='/products' className="px-7 py-3 bg-white/10 text-white font-semibold rounded-full hover:bg-white/20 transition-all border border-white/20">
+                    Browse Categories
+                </Link>
+            </div>
         </div>
       </div>
     </section>
