@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import type { Product } from "../types"
+import { Star } from "lucide-react";
 
 interface Props {
     product: Product;
@@ -18,7 +19,16 @@ const ProductCard = ({product}: Props) => {
           {product.discount > 0 && <span className="px-2 py-0.5 text-[10%] font-semibold uppercase bg-app-orange text-white rounded-full">{product.discount}% OFF</span>}
         </div>
       </div>
-      
+      <div className="p-3.5 text-zinc-700">
+        <h3 className="text-sm leading-snug mb-1.5 line-clamp-2">{product.name}</h3>
+        {product.rating > 0 && (
+          <div className="flex items-center gap-1 mb-2">
+            <Star className="size-3 text-app-warning fill-app-warning" />
+            <span className="text-xs font-medium text-app-text">{product.rating}</span>
+            <span className="text-xs text-app-text-light">({product.reviewCount})</span>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
