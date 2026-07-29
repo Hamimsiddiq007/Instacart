@@ -14,6 +14,9 @@ const ProductCard = ({product}: Props) => {
       {/* Image */}
       <div className="">
         <img src={product.image} alt={product.name} className="w-full h-full object-cover p-4 group-hover:p-2 transition-all duration-300" />
+        <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
+          {product.discount > 0 && <span className="px-2 py-0.5 text-[10%] font-semibold uppercase bg-app-orange text-white rounded-full">{product.discount}% OFF</span>}
+        </div>
       </div>
       
     </div>
