@@ -13,7 +13,7 @@ const Home = () => {
       <HomeCategories />
       <PopularProducts />
       <AppPromoBanner />
-      <Newsletter/>
+      <Newsletter />
     </div>
   );
 };
