@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext, type ReactNode } from "react";
 import type { CartItem, Product } from "../types";
 
 interface CartContextType {
@@ -14,3 +14,10 @@ interface CartContextType {
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined)
+
+export function CartProvider({ children }: { children: ReactNode }) {
+    return <CartContext.Provider value={{}}>
+        {children}
+    </CartContext.Provider>
+}
+
