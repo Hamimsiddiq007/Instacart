@@ -48,6 +48,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
         setItems(prev => prev.map(item => item.product._id === productId ? {...item, quantity} : item));
     }
 
+    const clearCart = () => {
+        setItems([]);
+        setIsCartOpen(false);
+    }
+
+    const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
+    const cartTotal = items.reduce((sum, item) => sum + item.quantity * item.product.price, 0);
+
     return <CartContext.Provider value={{}}>
         {children}
     </CartContext.Provider>
