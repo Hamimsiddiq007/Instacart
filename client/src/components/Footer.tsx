@@ -52,6 +52,20 @@ const Footer = () => {
               </ul>
             </div>
           ))}
+          {/* Contact */}
+          <div className="">
+            <h3 className="text-sm font-semibold uppercase mb-4">Contact Us</h3>
+            <ul className="space-y-3">
+              {footerData.contact.map((item, index) => {
+                const Icon = item.icon;
+                return (
+                  <li key={index} className="flex gap-3 text-sm text-white/70">
+                    <Icon className="size-4 text-white" /> {item.text}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
         </div>
       </div>
     </footer>
