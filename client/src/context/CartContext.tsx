@@ -1,4 +1,4 @@
-import { createContext, type ReactNode } from "react";
+import { createContext, use, useContext, type ReactNode } from "react";
 import type { CartItem, Product } from "../types";
 
 interface CartContextType {
@@ -19,5 +19,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     return <CartContext.Provider value={{}}>
         {children}
     </CartContext.Provider>
+}
+
+export function useCart(){
+    const context = useContext(CartContext);
+    if(!context) throw new Error("useCart must be used within a CartProvider");
+    return context
 }
 
