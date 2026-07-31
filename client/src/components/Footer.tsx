@@ -67,6 +67,16 @@ const Footer = () => {
             </ul>
           </div>
         </div>
+
+        {/* Bottom */}
+        <div className="border-t border-white/10 mt-10 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+              <p className="text-xs text-white/50">© 2026 Hamim Siddiq. All rights reserved.</p>
+              <div className="flex gap-4">
+                {footerData.bottom.links.map((link, index) => (
+                  <a key={index} href={link.href} className="text-xs text-white/50 hover:text-white/70">{link.label}</a>
+                ))}
+              </div>
+        </div>
       </div>
     </footer>
   );
