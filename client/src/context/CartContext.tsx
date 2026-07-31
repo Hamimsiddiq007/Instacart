@@ -1,4 +1,4 @@
-import { createContext, use, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { CartItem, Product } from "../types";
 
 interface CartContextType {
@@ -56,7 +56,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const cartCount = items.reduce((sum, item) => sum + item.quantity, 0);
     const cartTotal = items.reduce((sum, item) => sum + item.quantity * item.product.price, 0);
 
-    return <CartContext.Provider value={{}}>
+    return <CartContext.Provider value={{
+        items,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        clearCart,
+        cartCount,
+        cartTotal,
+        isCartOpen,
+        setIsCartOpen
+    }}>
         {children}
     </CartContext.Provider>
 }
