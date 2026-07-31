@@ -47,6 +47,31 @@ const CartSidebar = () => {
             <XIcon className="size-5" />
           </button>
         </div>
+
+        {/* Items */}
+        <div className="flex-1 overflow-y-auto p-5 space-y-4">
+            {items.length === 0 ? (
+                <div className="flex flex-col items-center justify-center h-full text-center">
+                    <ShoppingBagIcon className="size-16 text-app-border mb-4" />
+                    <h4 className="text-lg font-medium mb-1">Your cart is empty</h4>
+                </div>
+            ) : (
+                items.map((item) => (
+                    <div key={item.product._id} className="flex gap-3 bg-app-cream/60 rounded-xl p-3">
+                        <img src={item.product.image} alt={item.product.name} className="size-16 rounded-lg object-cover shrink-0" />
+                        <div className="flex-1 min-w-0">
+                            <h4 className="text-sm font-semibold truncate">{item.product.name}</h4>
+                            <p className="text-xs text-app-text-light">{currency}{item.product.price.toFixed(2)} / {item.product.unit}</p>
+                            <div className="flex items-center justify-between">
+                                <div className=""></div>
+                                <div className=""></div>
+                            </div>
+                        </div>
+                    </div>
+                ))
+            )}
+        </div>
+
       </div>
     </>
   );
