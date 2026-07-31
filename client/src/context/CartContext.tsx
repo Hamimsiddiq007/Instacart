@@ -28,6 +28,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
         localStorage.setItem('app_cart', JSON.stringify(items));
     }, [items]);
 
+    const addToCart = (product: Product, quantity = 1) => {
+        setItems((prev)=>{
+            const existing = prev.find(item => item.product._id === product._id);
+            if(existing){
+                return prev.map(item => item.product._id === product._id ? {...item, quantity: item.quantity + quantity} : item);
+            }
+            return [...prev, {product, quantity}];
+        })
+        setIsCartOpen(true);
+    }
+
     return <CartContext.Provider value={{}}>
         {children}
     </CartContext.Provider>
