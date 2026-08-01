@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { MinusIcon, PlusIcon, ShoppingBagIcon, Trash2Icon, XIcon } from "lucide-react";
+import { ArrowRightIcon, MinusIcon, PlusIcon, ShoppingBagIcon, Trash2Icon, XIcon } from "lucide-react";
 
 const CartSidebar = () => {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
@@ -84,6 +84,28 @@ const CartSidebar = () => {
                 ))
             )}
         </div>
+        {/* Footer */}
+        {items.length > 0 && (
+          <div className="p-5 border-t border-app-border space-y-3">
+            <div className="flex justify-between text-sm">
+              <span className="text-app-text-light">Subtotal</span>
+              <span className="font-medium">{currency}{cartTotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-app-text-light">Delivery</span>
+              <span className="font-medium">{delivaryFee === 0 ? <span className="text-app-success">Free</span> : `${currency}${delivaryFee.toFixed(2)}`}</span>
+            </div>
+            {delivaryFee > 0 && <p className="text-xs text-app-text-light text-center">Free delivery on orders over {currency}20!</p>}
+
+            <div className="flex justify-between text-base font-semibold border-t border-app-border pt-3">
+              <span>Total</span>
+              <span>{currency}{grandTotal.toFixed(2)}</span>
+            </div>
+            <button onClick={() => {setIsCartOpen(false); navigate('/checkout'); window.scrollTo(0, 0)}} className="w-full py-3 bg-app-orange text-white font-semibold rounded-xl hover:bg-app-orange-dark transition-colorsflex-center gap-2 active:scale-[0.98]">
+              Proceed to Checkout <ArrowRightIcon className="size-4" />
+            </button>
+          </div>
+        )}
 
       </div>
     </>
