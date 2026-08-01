@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { ShoppingBagIcon, XIcon } from "lucide-react";
+import { MinusIcon, PlusIcon, ShoppingBagIcon, Trash2Icon, XIcon } from "lucide-react";
 
 const CartSidebar = () => {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
@@ -63,8 +63,21 @@ const CartSidebar = () => {
                             <h4 className="text-sm font-semibold truncate">{item.product.name}</h4>
                             <p className="text-xs text-app-text-light">{currency}{item.product.price.toFixed(2)} / {item.product.unit}</p>
                             <div className="flex items-center justify-between">
-                                <div className=""></div>
-                                <div className=""></div>
+                                <div className="flex items-center gap-1.5">
+                                  <button onClick={() => updateQuantity(item.product._id, item.quantity - 1)} className="size-7 rounded-lg bg-white border border-app-border flex-center">
+                                    <MinusIcon className="size-3"/>
+                                  </button>
+                                  <span className="text-sm font-semibold w-6 text-center">{item.quantity}</span>
+                                  <button onClick={() => updateQuantity(item.product._id, item.quantity + 1)} className="size-7 rounded-lg bg-white border border-app-border flex-center">
+                                    <PlusIcon className="size-3"/>
+                                  </button>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-sm font-semibold">{currency}{(item.product.price * item.quantity).toFixed(2)}</span>
+                                  <button onClick={() => removeFromCart(item.product._id)} className="p-1 text-app-text-light hover:text-app-error transition-colors">
+                                    <Trash2Icon className="size-4"/>
+                                  </button>
+                                </div>
                             </div>
                         </div>
                     </div>
