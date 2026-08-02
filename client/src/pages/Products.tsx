@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { Product } from "../types";
 import { categoriesData, dummyProducts } from "../assets/assets";
+import {Link} from "react-router-dom";
+import { Home } from "lucide-react";
 
 const Products = () => {
 
@@ -47,8 +49,17 @@ const Products = () => {
   }, [category, organic, sort, page, minPrice, maxPrice]);
 
   return (
-    <div>
-      Products
+    <div className="min-h-screen bg-app-cream">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        {/* Breadcrumb */}
+        <nav className="flex items-center gap-2 text-sm text-app-text-light mb-6">
+          <Link to='/' className="hover:text-app-green transition-colors">
+            <Home className="size-4" />
+          </Link>
+          <span>/</span>
+          <span className="text-app-green font-medium">{activeCategory ? activeCategory.name : "All Products"}</span>
+        </nav>
+      </div>
     </div>
   )
 }
