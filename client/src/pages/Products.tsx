@@ -24,6 +24,19 @@ const Products = () => {
     setLoading(false);
   }
 
+  const updateFilters = (key: string, value: string) => {
+    const newParams = new URLSearchParams(searchParams);
+    if(value){
+      newParams.set(key, value);
+    }else{
+      newParams.delete(key);
+    }
+    if(key !== "page"){
+      newParams.delete("page");
+    }
+    setSearchParams(newParams);
+  }
+
   useEffect(() => {
     fetchProducts();
   }, [category, organic, sort, page, minPrice, maxPrice]);
