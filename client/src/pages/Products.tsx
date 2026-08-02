@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import type { Product } from "../types";
+import { dummyProducts } from "../assets/assets";
 
 const Products = () => {
 
@@ -16,6 +17,16 @@ const Products = () => {
   const page = Number(searchParams.get("page")) || 1;
   const minPrice = searchParams.get("minPrice") || "";
   const maxPrice = searchParams.get("maxPrice") || "";
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    setProducts(dummyProducts.filter((p) => p.category === category || category === ""));
+    setLoading(false);
+  }
+
+  useEffect(() => {
+    fetchProducts();
+  }, [category, organic, sort, page, minPrice, maxPrice]);
 
   return (
     <div>
