@@ -4,6 +4,7 @@ import type { Product } from "../types";
 import { categoriesData, dummyProducts } from "../assets/assets";
 import {Link} from "react-router-dom";
 import { ChevronDown, Home, SlidersHorizontal } from "lucide-react";
+import ProductCard from "../components/ProductCard";
 
 const Products = () => {
 
@@ -107,7 +108,11 @@ const Products = () => {
                 <button onClick={clearFilters} className="px-5 py-2 text-sm font-medium bg-app-green text-white rounded-xl hover:bg-app-green-light transition-colors">Clear Filters</button>
               </div>
             ) : (
-              <div className=""></div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 xl:gap-8">
+                {products.map((product) => product.stock > 0 && (
+                  <ProductCard key={product._id} product={product} />
+                ))}
+              </div>
             )}
           </main>
         </div>
