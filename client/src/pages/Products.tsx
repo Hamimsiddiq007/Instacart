@@ -96,6 +96,19 @@ const Products = () => {
                 </div>
               </div>
             </div>
+
+            {/* Product Grid */}
+            {loading ? (
+              <p>Loading...</p>
+            ) : products.length === 0 ? (
+              <div className="text-center py-16">
+                <p className="text-lg font-semibold text-app-green mb-2">No products found</p>
+                <p className="text-sm text-app-text-light mb-4">Try adjusting your filters or search terms</p>
+                <button onClick={clearFilters} className="px-5 py-2 text-sm font-medium bg-app-green text-white rounded-xl hover:bg-app-green-light transition-colors">Clear Filters</button>
+              </div>
+            ) : (
+              <div className=""></div>
+            )}
           </main>
         </div>
       </div>
