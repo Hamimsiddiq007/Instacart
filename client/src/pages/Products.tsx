@@ -59,6 +59,20 @@ const Products = () => {
           <span>/</span>
           <span className="text-app-green font-medium">{activeCategory ? activeCategory.name : "All Products"}</span>
         </nav>
+
+        <div className="flex gap-8 xl:gap-10">
+          {/* Sidebar - Desktop */}
+          <aside className="hidden lg:block w-64 shrink-0">
+            <div className="bg-white rounded-2xl p-4 sticky top-24">
+              <p>Filters</p>
+            </div>
+          </aside>
+
+          {/* Main Content */}
+          <main className="flex-1">
+
+          </main>
+        </div>
       </div>
     </div>
   )
