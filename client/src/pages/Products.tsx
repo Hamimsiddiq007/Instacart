@@ -70,7 +70,13 @@ const Products = () => {
 
           {/* Main Content */}
           <main className="flex-1">
-
+            {/* Header */}
+            <div className="flex items-center justify-between mb-6">
+              <div className="">
+                <h1 className="text-2xl font-semibold text-app-green">{activeCategory ? activeCategory.name : "All Products"}</h1>
+                <p className="text-sm text-app-text-light mt-0.5">{products.length} products found</p>
+              </div>
+            </div>
           </main>
         </div>
       </div>
