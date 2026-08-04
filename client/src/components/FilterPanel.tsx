@@ -5,8 +5,7 @@ const FilterPanel = ({
   maxPrice,
   updateFilters,
   clearFilters,
-  hasFilters,
-  organic
+  hasFilters
 }: any) => {
   const categoriesWithAll = [
     { slug: "", name: "All Categories" },
