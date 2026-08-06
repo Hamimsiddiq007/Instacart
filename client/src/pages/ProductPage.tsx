@@ -97,20 +97,42 @@ const ProductPage = () => {
             </div>
 
             <div className="p-6 md:p-10 flex flex-col justify-center">
-              <span className="text-xs font-medium text-app-text-light tracking-wider mb-2 capitalize">{categoryLabel}</span>
-              <h1 className="text-2xl md:text-3xl font-semibold text-app-green mb-3">{product.name}</h1>
+              <span className="text-xs font-medium text-app-text-light tracking-wider mb-2 capitalize">
+                {categoryLabel}
+              </span>
+              <h1 className="text-2xl md:text-3xl font-semibold text-app-green mb-3">
+                {product.name}
+              </h1>
 
               {product.rating > 0 && (
                 <div className="flex items-center gap-2 mb-5">
                   <div className="flex items-center gap-0.5">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <StarIcon key={star} className={`w-4 h-4 ${star <= Math.round(product.rating) ? 'text-app-warning fill-app-warning' : 'text-app-border'}`} />
+                      <StarIcon
+                        key={star}
+                        className={`w-4 h-4 ${star <= Math.round(product.rating) ? "text-app-warning fill-app-warning" : "text-app-border"}`}
+                      />
                     ))}
                   </div>
                   <span className="text-sm font-medium">{product.rating}</span>
-                  <span className="text-sm text-app-text-light">({product.reviewCount} reviews)</span>
+                  <span className="text-sm text-app-text-light">
+                    ({product.reviewCount} reviews)
+                  </span>
                 </div>
               )}
+
+              <div className="flex items-baseline gap-3 mb-5">
+                <span className="text-3xl md:text-4xl font-semibold text-app-green">
+                  {currency}
+                  {product.price.toFixed(2)}
+                </span>
+                {product.originalPrice > product.price && (
+                  <span className="text-lg text-app-text-light line-through">
+                    {currency}
+                    {product.originalPrice.toFixed(2)}
+                  </span>
+                )}
+              </div>
             </div>
           </div>
         </div>
