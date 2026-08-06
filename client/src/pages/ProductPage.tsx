@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { Product } from "../types";
 import { dummyProducts } from "../assets/assets";
 import Loading from "../components/Loading";
-import { ArrowLeftIcon, HomeIcon } from "lucide-react";
+import { ArrowLeftIcon, HomeIcon, LeafIcon } from "lucide-react";
 
 const ProductPage = () => {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL;
@@ -72,6 +72,31 @@ const ProductPage = () => {
         >
           <ArrowLeftIcon className="size-4" /> Back
         </button>
+
+        {/* Product Details */}
+        <div className="bg-white/50 rounded-2xl overflow-hidden">
+          <div className="grid md:grid-cols-2 gap-0">
+            <div className="relative flex-center p-8 md:p-12 min-h-80 md:min-h-120">
+              <img
+                src={product.image}
+                alt={product.name}
+                className="max-h-90 w-auto object-contain"
+              />
+              <div className="absolute top-5 left-5 flex flex-wrap gap-1.5">
+                {product.isOrganic && (
+                  <span className="flex items-center gap-1 px-2.5 py-1 text-xs font-semibold bg-app-green text-white rounded-full">
+                    <LeafIcon className="w-3 h-3" /> Organic
+                  </span>
+                )}
+                {product.discount > 0 && (
+                  <span className="px-2.5 py-1 text-xs font-semibold bg-app-orange text-white rounded-full">
+                    {product.discount}% OFF
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
