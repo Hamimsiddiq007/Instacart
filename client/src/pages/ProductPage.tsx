@@ -40,7 +40,7 @@ const ProductPage = () => {
   const handlePlus = () => {
     if (!product) return;
 
-    if(inCart) updateQuantity(product._id, cartItem!.quantity + 1);
+    if (inCart) updateQuantity(product._id, cartItem!.quantity + 1);
     else setLocalQuantity(localQuantity + 1);
   };
 
@@ -179,7 +179,10 @@ const ProductPage = () => {
 
               <div className="flex items-center gap-3">
                 <div className="flex items-center border border-app-border rounded-xl overflow-hidden">
-                  <button className="p-3 hover:bg-app-cream transition-colors">
+                  <button
+                    onClick={handleMinus}
+                    className="p-3 hover:bg-app-cream transition-colors"
+                  >
                     <MinusIcon className="w-4 h-4" />
                   </button>
 
@@ -187,7 +190,10 @@ const ProductPage = () => {
                     {displayQuantity}
                   </span>
 
-                  <button className="p-3 hover:bg-app-cream transition-colors">
+                  <button
+                    onClick={handlePlus}
+                    className="p-3 hover:bg-app-cream transition-colors"
+                  >
                     <PlusIcon className="w-4 h-4" />
                   </button>
                 </div>
