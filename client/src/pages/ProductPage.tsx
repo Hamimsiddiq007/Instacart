@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { Product } from "../types";
 import { dummyProducts } from "../assets/assets";
 import Loading from "../components/Loading";
-import { ArrowLeftIcon, HomeIcon, LeafIcon, StarIcon } from "lucide-react";
+import { ArrowLeftIcon, HomeIcon, LeafIcon, MinusIcon, PlusIcon, StarIcon } from "lucide-react";
 
 const ProductPage = () => {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL;
@@ -151,7 +151,17 @@ const ProductPage = () => {
               </div>
 
               <div className="flex items-center gap-3">
-                <div className=""></div>
+                <div className="flex items-center border border-app-border rounded-xl overflow-hidden">
+                  <button className="p-3 hover:bg-app-cream transition-colors">
+                    <MinusIcon className="w-4 h-4" />
+                  </button>
+
+                  <span className="px-5 text-sm font-semibold text-center min-w-10">{displayQuantity}</span>
+
+                  <button className="p-3 hover:bg-app-cream transition-colors">
+                    <PlusIcon className="w-4 h-4" />
+                  </button>
+                </div>
                 <button></button>
               </div>
             </div>
