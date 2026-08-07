@@ -37,6 +37,13 @@ const ProductPage = () => {
     }
   };
 
+  const handlePlus = () => {
+    if (!product) return;
+
+    if(inCart) updateQuantity(product._id, cartItem!.quantity + 1);
+    else setLocalQuantity(localQuantity + 1);
+  };
+
   useEffect(() => {
     setLoading(true);
     setLocalQuantity(1);
