@@ -4,7 +4,15 @@ import { useEffect, useState } from "react";
 import type { Product } from "../types";
 import { dummyProducts } from "../assets/assets";
 import Loading from "../components/Loading";
-import { ArrowLeftIcon, HomeIcon, LeafIcon, MinusIcon, PlusIcon, StarIcon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  HomeIcon,
+  LeafIcon,
+  MinusIcon,
+  PlusIcon,
+  ShoppingCartIcon,
+  StarIcon,
+} from "lucide-react";
 
 const ProductPage = () => {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL;
@@ -156,13 +164,24 @@ const ProductPage = () => {
                     <MinusIcon className="w-4 h-4" />
                   </button>
 
-                  <span className="px-5 text-sm font-semibold text-center min-w-10">{displayQuantity}</span>
+                  <span className="px-5 text-sm font-semibold text-center min-w-10">
+                    {displayQuantity}
+                  </span>
 
                   <button className="p-3 hover:bg-app-cream transition-colors">
                     <PlusIcon className="w-4 h-4" />
                   </button>
                 </div>
-                <button></button>
+                <button
+                  onClick={() => {
+                    if (!inCart) addToCart(product, localQuantity);
+                  }}
+                  disabled={product.stock === 0}
+                  className={`flex-1 py-3 font-semibold rounded-xl transition-colors flex-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] ${inCart ? "bg-app-cream text-app-green border border-app-green" : "bg-app-orange text-white hover:bg-app-orange-dark"}`}
+                >
+                  <ShoppingCartIcon className="w-4 h-4" />
+                  {inCart ? "Added to Cart" : "Add to Cart"}
+                </button>
               </div>
             </div>
           </div>
