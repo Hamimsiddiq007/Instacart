@@ -13,6 +13,7 @@ import {
   ShoppingCartIcon,
   StarIcon,
 } from "lucide-react";
+import DummyReviewsSection from "../assets/DummyReviewsSection";
 
 const ProductPage = () => {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL;
@@ -211,6 +212,9 @@ const ProductPage = () => {
             </div>
           </div>
         </div>
+
+        {/* Customer Reviews */}
+        {product.reviewCount > 0 && <DummyReviewsSection product={product} />}
       </div>
     </div>
   );
