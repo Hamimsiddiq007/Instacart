@@ -52,9 +52,15 @@ const ProductPage = () => {
     setLocalQuantity(1);
     window.scrollTo(0, 0);
     const product = dummyProducts.find((product) => product.id === id);
+    if (!product) {
+      setLoading(false);
+      return;
+    }
     setProduct(product!);
     setRelatedProducts(
-      dummyProducts.filter((product) => product.id !== id).slice(0, 4),
+      dummyProducts.filter(
+        (item) => item.category === product.category && item.id !== id,
+      ),
     );
     setLoading(false);
   }, [id, navigate]);
