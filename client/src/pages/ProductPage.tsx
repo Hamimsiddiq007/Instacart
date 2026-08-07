@@ -25,6 +25,18 @@ const ProductPage = () => {
   const [loading, setLoading] = useState(true);
   const [localQuantity, setLocalQuantity] = useState(1);
 
+  const handleMinus = () => {
+    if (!product) return;
+
+    if (inCart) {
+      if (cartItem!.quantity > 1) {
+        updateQuantity(product._id, cartItem!.quantity - 1);
+      } else removeFromCart(product._id);
+    } else {
+      setLocalQuantity(Math.max(1, localQuantity - 1));
+    }
+  };
+
   useEffect(() => {
     setLoading(true);
     setLocalQuantity(1);
