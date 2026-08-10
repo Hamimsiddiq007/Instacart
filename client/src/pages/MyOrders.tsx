@@ -24,9 +24,11 @@ const MyOrders = () => {
   }
 
   useEffect(() => {
-    if(searchParams.get("clearCart") === "true") {
+    if(searchParams.get("clearCart")) {
       clearCart();
       setSearchParams({})
+      fetchOrders();
+    } else {
       fetchOrders();
     }
   }, [activeTab])
