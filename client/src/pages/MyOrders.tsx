@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import type { Order } from "../types";
 import { Link, useSearchParams } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-import { dummyDashboardOrdersData } from "../assets/assets";
+import { dummyDashboardOrdersData, statusColors } from "../assets/assets";
 import Loading from "../components/Loading";
-import { PackageIcon } from "lucide-react";
+import { Calendar1Icon, ChevronRightIcon, PackageIcon } from "lucide-react";
 
 const MyOrders = () => {
 
@@ -60,7 +60,32 @@ const MyOrders = () => {
             </Link>
           </div>
         ) : (
-          <div className=""></div>
+          <div className="space-y-4">
+            {orders.map((order) =>(
+              <Link key={order._id} to={`/orders/${order._id}`} className="block max-w-4xl bg-white rounded-2xl p-5 hover:shadow transition-colors">
+                {/* Order details */}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="">
+                    <p className="text-sm font-medium text-app-green">Order #{order._id.slice(-8).toUpperCase()}</p>
+                    <div className="flex items-center gap-2 mt-1">
+                      <Calendar1Icon className="size-3 text-app-text-light" />
+                      <span className="text-xs text-app-text-light">{new Date(order.createdAt).toLocaleDateString("en-US", {month: "short", day: "numeric", year: "numeric"})}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <span className={`px-4 py-1 text-xs font-medium rounded-full ${statusColors[order.status] || "bg-gray-100 text-gray-700"}`}>{order.status}</span>
+                    <ChevronRightIcon className="size-4 text-app-text-light" />
+                  </div>
+
+                </div>
+
+                {/* Items thumbnails */}
+
+                {/* Order total */}
+              </Link>
+            ))}
+          </div>
         )}
 
       </div>
