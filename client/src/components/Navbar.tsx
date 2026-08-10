@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 
 const Navbar = () => {
-  const user: any = null
+  const user: any = {name: 'John Doe', email: 'johndoe@example.com'}
   const { cartCount, setIsCartOpen } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
   const [userManuOpen, setUserManuOpen] = useState(false);
