@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import type { Order } from "../types";
 import { dummyDashboardOrdersData } from "../assets/assets";
 import Loading from "../components/Loading";
+import { ArrowLeftIcon } from "lucide-react";
 
 const OrderTracking = () => {
 
@@ -22,8 +23,13 @@ const OrderTracking = () => {
   if(!order) null;
 
   return (
-    <div>
-      Order Tracking
+    <div className="min-h-screen mb-20 bg-app-cream">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Header */}
+        <button onClick={() => navigate("/orders")} className="flex items-center gap-2 text-sm text-app-text-light hover:text-app-green mb-6 transition-colors">
+          <ArrowLeftIcon className="size-4" /> Back to orders
+        </button>
+      </div>
     </div>
   )
 }
