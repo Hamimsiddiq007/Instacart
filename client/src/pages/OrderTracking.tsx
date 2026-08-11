@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import type { Order } from "../types";
 import { dummyDashboardOrdersData } from "../assets/assets";
 import Loading from "../components/Loading";
-import { ArrowLeftIcon } from "lucide-react";
+import { ArrowLeftIcon, PhoneIcon } from "lucide-react";
 import OrderOTP from "../components/OrderTracking/OrderOTP";
 import LiveMap from "../components/OrderTracking/LiveMap";
 import OrderTimeLine from "../components/OrderTracking/OrderTimeLine";
@@ -56,6 +56,26 @@ console.log("Status:", order.status);
 
             {/* Progress Timeline */}
             <OrderTimeLine order={order} />
+
+            {/* Delivery Person */}
+            {order.deliveryPartner && order.status !== "Delivered" && order.status !== "Cancelled" && (
+              <div className="bg-white rounded-2xl p-5 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="size-11 rounded-full bg-app-green flex-center">
+                    <span className="text-white font-semibold text-sm">
+                      {order.deliveryPartner.name.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <div className="">
+                    <p className="text-sm font-semibold text-app-green">{order.deliveryPartner.name}</p>
+                    <p className="text-xs text-app-text-light capitalize">{order.deliveryPartner.vehicleType} ● Delivery Partner</p>
+                  </div>
+                </div>
+                <a href={`tel:${order.deliveryPartner.phone}`} className="p-2.5 bg-app-cream rounded-xl hover:bg-app-cream-dark transition-colors">
+                  <PhoneIcon className="size-4 text-app-green" />
+                </a>
+              </div>
+            )}
           </div>
 
         </div>
