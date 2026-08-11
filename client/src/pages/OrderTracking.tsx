@@ -37,6 +37,16 @@ const OrderTracking = () => {
           </div>
           <span className={`px-4 py-1.5 text-sm font-semibold rounded-full ${order!.status === "Delivered" ? "bg-green-100 text-green-700" : order!.status === "Cancelled" ? "bg-red-100 text-red-700" : "bg-app-orange/10 text-app-orange"}`}>{order!.status}</span>
         </div>
+
+        <div className="grid lg:grid-cols-3 gap-6">
+          {/* Timeline + Map */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* OTP card */}
+            
+          </div>
+
+        </div>
+
       </div>
     </div>
   )
