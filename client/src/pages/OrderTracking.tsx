@@ -5,6 +5,7 @@ import { dummyDashboardOrdersData } from "../assets/assets";
 import Loading from "../components/Loading";
 import { ArrowLeftIcon } from "lucide-react";
 import OrderOTP from "../components/OrderTracking/OrderOTP";
+import LiveMap from "../components/OrderTracking/LiveMap";
 
 const OrderTracking = () => {
 
@@ -48,6 +49,9 @@ console.log("Status:", order.status);
           <div className="lg:col-span-2 space-y-6">
             {/* OTP card */}
             <OrderOTP order={order} />
+
+            {/* Live Tracking Map */}
+            <LiveMap  order={order} liveLocation={liveLocation}/>
           </div>
 
         </div>
