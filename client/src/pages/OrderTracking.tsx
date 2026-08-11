@@ -4,6 +4,7 @@ import type { Order } from "../types";
 import { dummyDashboardOrdersData } from "../assets/assets";
 import Loading from "../components/Loading";
 import { ArrowLeftIcon } from "lucide-react";
+import OrderOTP from "../components/OrderTracking/OrderOTP";
 
 const OrderTracking = () => {
 
@@ -17,10 +18,14 @@ const OrderTracking = () => {
   useEffect(() => {
     setOrder(dummyDashboardOrdersData.find(order => order._id === id) as any);
     setLoading(false);
-  }, [id, navigate])
+  }, [id]);
 
   if(loading) return <Loading/>
-  if(!order) null;
+  if(!order) return null;
+
+  console.log("Order:", order);
+console.log("OTP:", order.deliveryOtp);
+console.log("Status:", order.status);
 
   return (
     <div className="min-h-screen mb-20 bg-app-cream">
@@ -42,7 +47,7 @@ const OrderTracking = () => {
           {/* Timeline + Map */}
           <div className="lg:col-span-2 space-y-6">
             {/* OTP card */}
-            
+            <OrderOTP order={order} />
           </div>
 
         </div>
