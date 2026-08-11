@@ -6,6 +6,7 @@ import Loading from "../components/Loading";
 import { ArrowLeftIcon } from "lucide-react";
 import OrderOTP from "../components/OrderTracking/OrderOTP";
 import LiveMap from "../components/OrderTracking/LiveMap";
+import OrderTimeLine from "../components/OrderTracking/OrderTimeLine";
 
 const OrderTracking = () => {
 
@@ -52,6 +53,9 @@ console.log("Status:", order.status);
 
             {/* Live Tracking Map */}
             <LiveMap  order={order} liveLocation={liveLocation}/>
+
+            {/* Progress Timeline */}
+            <OrderTimeLine order={order} />
           </div>
 
         </div>
