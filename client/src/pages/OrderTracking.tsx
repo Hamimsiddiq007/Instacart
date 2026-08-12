@@ -25,10 +25,6 @@ const OrderTracking = () => {
   if(loading) return <Loading/>
   if(!order) return null;
 
-  console.log("Order:", order);
-console.log("OTP:", order.deliveryOtp);
-console.log("Status:", order.status);
-
   return (
     <div className="min-h-screen mb-20 bg-app-cream">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -92,6 +88,21 @@ console.log("Status:", order.status);
                 <br />
                 {order.shippingAddress.city}, {order.shippingAddress.state} {order.shippingAddress.zip}
               </p>
+            </div>
+            {/* Items */}
+            <div className="bg-white rounded-2xl p-5">
+              <h3 className="text-sm font-semibold text-app-green mb-3">Items ({order?.items.length})</h3>
+              <div className="space-y-3">
+                {order?.items.map((item, index) => (
+                  <div key={index} className="flex items-center gap-3">
+                    <img src={item.image} alt={item.name} className="size-10 rounded-lg object-cover" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-app-green truncate">{item.name}</p>
+                      <p className="text-xs text-app-text-light">x{item.quantity}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
           </div>
