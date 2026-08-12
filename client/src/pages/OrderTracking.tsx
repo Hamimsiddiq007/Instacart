@@ -10,6 +10,7 @@ import OrderTimeLine from "../components/OrderTracking/OrderTimeLine";
 
 const OrderTracking = () => {
 
+  const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
   const {id} = useParams();
   const navigate = useNavigate();
 
@@ -100,8 +101,30 @@ const OrderTracking = () => {
                       <p className="text-sm font-medium text-app-green truncate">{item.name}</p>
                       <p className="text-xs text-app-text-light">x{item.quantity}</p>
                     </div>
+                    <span className="text-sm font-semibold">
+                      {currency}{(item.price * item.quantity).toFixed(2)}
+                    </span>
                   </div>
                 ))}
+              </div>
+
+              <div className="mt-4 pt-3 border-t border-app-border space-y-1.5 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-app-text-light">Subtotal</span>
+                  <span>{currency}{order?.subtotal.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-app-text-light">Delivery</span>
+                  <span>{order?.deliveryFee === 0 ? "Free" : `${currency}${order?.deliveryFee.toFixed(2)}`}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-app-text-light">Tax</span>
+                  <span>{currency}{order?.tax.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between mt-2 pt-2 border-t border-app-border font-semibold text-app-green">
+                  <span>Total</span>
+                  <span>{currency}{order?.total.toFixed(2)}</span>
+                </div>
               </div>
             </div>
 
