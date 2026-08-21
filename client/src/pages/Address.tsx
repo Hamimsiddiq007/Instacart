@@ -76,7 +76,11 @@ const Address = () => {
             <p className="text-sm text-app-text-l">Add an address for faster checkout</p>
           </div>
         ) : (
-          <div className=""></div>
+          <div className="space-y-4">
+            {addresses.map((add) => (
+              <div className="">{add.address}</div>
+            ))}
+          </div>
         )}
 
       </div>
