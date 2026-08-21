@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Address } from "../types";
 import { dummyAddressData } from "../assets/assets";
+import { PlusIcon } from "lucide-react";
 
 const Address = () => {
 
@@ -53,8 +54,17 @@ const Address = () => {
   }, []);
 
   return (
-    <div>
-      Address
+    <div className="min-h-screen bg-app-cream">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Page Header */}
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-2xl font-semibold text-app-green">My Addresses</h1>
+          <button onClick={() => {resetForm(); setShowForm(true)}} className="px-4 py-2 bg-app-green text-white text-sm font-semibold rounded-xl hover:bg-app-green-light transition-colors flex items-center gap-2">
+            <PlusIcon className="size-4" /> Add Address
+          </button>
+        </div>
+
+      </div>
     </div>
   )
 }
