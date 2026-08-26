@@ -1,18 +1,20 @@
-import { CheckIcon, MapPinIcon } from "lucide-react";
-import type { Address } from "../types"
+import { CheckIcon, MapPinIcon, PencilIcon, Trash2Icon } from "lucide-react";
+import type { Address } from "../types";
 
 interface AddressCardProps {
-    addr: Address;
-    onEditHandler: (addr: Address) => void;
-    setAddress: (addresses: Address[]) => void
+  addr: Address;
+  onEditHandler: (addr: Address) => void;
+  setAddress: (addresses: Address[]) => void;
 }
-const AddressCard = ({addr, onEditHandler, setAddress } : AddressCardProps) => {
-
-    const handleDelete = async (id: string) => {
-        console.log(id)
-    }
+const AddressCard = ({ addr, onEditHandler, setAddress }: AddressCardProps) => {
+  const handleDelete = async (id: string) => {
+    console.log(id);
+  };
   return (
-    <div key={addr._id} className="max-w-3xl bg-white rounded-2xl p-6 flex items-start justify-between">
+    <div
+      key={addr._id}
+      className="max-w-3xl bg-white rounded-2xl p-6 flex items-start justify-between"
+    >
       {/* Left */}
       <div className="flex gap-4">
         <div className="size-10 rounded-xl bg-app-cream flex-center shrink-0">
@@ -27,11 +29,28 @@ const AddressCard = ({addr, onEditHandler, setAddress } : AddressCardProps) => {
               </span>
             )}
           </div>
-          <p className="text-sm text-app-text-light">{addr.address}, {addr.city}, <br /> {addr.state}, {addr.zip}</p>
+          <p className="text-sm text-app-text-light">
+            {addr.address}, {addr.city}, <br /> {addr.state}, {addr.zip}
+          </p>
         </div>
       </div>
+      {/* Action button */}
+      <div className="flex items-center gap-1">
+        <button
+          onClick={() => onEditHandler(addr)}
+          className="p-2 text-app-text-light hover:text-app-green hover:bg-app-cream rounded-lg transition-colors"
+        >
+          <PencilIcon className="size-4" />
+        </button>
+        <button
+          onClick={() => handleDelete(addr._id)}
+          className="p-2 text-app-text-light hover:text-app-error hover:bg-red-50 rounded-lg transition-colors"
+        >
+          <Trash2Icon className="size-4" />
+        </button>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default AddressCard
+export default AddressCard;
