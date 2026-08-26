@@ -15,6 +15,19 @@ const AddressForm = ({resetForm, handleSubmit, form, setForm, editingId} : any) 
                     <XIcon className="size-5" />
                 </button>
             </div>
+            {/* Input fields */}
+            <div className="space-y-4">
+                <div className="">
+                    <label className="block text-sm font-medium text-app-green mb-1.5">Label</label>
+                    <input type="text" placeholder="Home, Work, etc" required className="w-full px-4 py-2.5 text-sm rounded-xl border border-app-border focus:border-app-green outline-none" value={form.label} onChange={(e) => setForm({...form, label: e.target.value})} />
+                </div>
+                <div className="">
+                    <label className="block text-sm font-medium text-app-green mb-1.5">Street Address</label>
+                    <input type="text" required className="w-full px-4 py-2.5 text-sm rounded-xl border border-app-border focus:border-app-green outline-none" value={form.address} onChange={(e) => setForm({...form, address: e.target.value})} />
+                </div>
+            </div>
+
+            <button type="submit"></button>
 
         </form>
     </div>
