@@ -3,6 +3,7 @@ import type { Address } from "../types";
 import { dummyAddressData } from "../assets/assets";
 import { MapPinIcon, PlusIcon } from "lucide-react";
 import Loading from "../components/Loading";
+import AddressCard from "../components/AddressCard";
 
 const Address = () => {
 
@@ -78,7 +79,7 @@ const Address = () => {
         ) : (
           <div className="space-y-4">
             {addresses.map((add) => (
-              <div className="">{add.address}</div>
+              <AddressCard key={add._id} addr={add} onEditHandler={onEditHandler} setAddress={setAddresses} />
             ))}
           </div>
         )}
