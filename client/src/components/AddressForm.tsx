@@ -25,6 +25,28 @@ const AddressForm = ({resetForm, handleSubmit, form, setForm, editingId} : any) 
                     <label className="block text-sm font-medium text-app-green mb-1.5">Street Address</label>
                     <input type="text" required className="w-full px-4 py-2.5 text-sm rounded-xl border border-app-border focus:border-app-green outline-none" value={form.address} onChange={(e) => setForm({...form, address: e.target.value})} />
                 </div>
+                <div className="grid grid-cols-2 gap-3">
+                    <div className="">
+                        <label className="block text-sm font-medium text-app-green mb-1.5">City</label>
+                        <input type="text" required className="w-full px-4 py-2.5 text-sm rounded-xl border border-app-border focus:border-app-green outline-none" value={form.city} onChange={(e) => setForm({...form, city: e.target.value})} />
+                    </div>
+                    <div className="">
+                        <label className="block text-sm font-medium text-app-green mb-1.5">State</label>
+                        <input type="text" required className="w-full px-4 py-2.5 text-sm rounded-xl border border-app-border focus:border-app-green outline-none" value={form.state} onChange={(e) => setForm({...form, state: e.target.value})} />
+                    </div>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                    <div className="">
+                        <label className="block text-sm font-medium text-app-green mb-1.5">ZIP Code</label>
+                        <input type="text" required className="w-full px-4 py-2.5 text-sm rounded-xl border border-app-border focus:border-app-green outline-none" value={form.zip} onChange={(e) => setForm({...form, zip: e.target.value})} />
+                    </div>
+                    <div className="flex items-end pb-1">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked={form.isDefault} onChange={(e) => setForm({...form, isDefault: e.target.checked})} />
+                            <span className="text-sm text-app-text">Set as default</span>
+                        </label>
+                    </div>
+                </div>
             </div>
 
             <button type="submit"></button>
