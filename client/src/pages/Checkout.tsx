@@ -1,17 +1,16 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { dummyAddressData } from "../assets/assets";
 import type { Address } from "../types";
 import { CheckIcon, CreditCardIcon, MapPinIcon } from "lucide-react";
 
 const Checkout = () => {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
 
-  const {items, cartTotal} = useCart();
-  const {user} = {user: {addresses: dummyAddressData}}
+  const { items, cartTotal } = useCart();
+  const { user } = { user: { addresses: dummyAddressData } };
 
   const [step, setStep] = useState("address");
   const [loading, setLoading] = useState(false);
@@ -24,8 +23,8 @@ const Checkout = () => {
     zip: "",
     isDefault: false,
     lat: 0,
-    lng: 0
-  })
+    lng: 0,
+  });
 
   const [paymentMethod, setPaymentMethod] = useState("card");
 
@@ -33,20 +32,21 @@ const Checkout = () => {
   const tax = cartTotal * 0.08;
   const total = cartTotal + deliveryFee + tax;
 
-  const steps: {key: string; label: string; icon: typeof MapPinIcon}[] = [
-    {key: "address", label: "Address", icon: MapPinIcon},
-    {key: "payment", label: "Payment", icon: CreditCardIcon},
-    {key: "review", label: "Review", icon: CheckIcon}
-  ]
+  const steps: { key: string; label: string; icon: typeof MapPinIcon }[] = [
+    { key: "address", label: "Address", icon: MapPinIcon },
+    { key: "payment", label: "Payment", icon: CreditCardIcon },
+    { key: "review", label: "Review", icon: CheckIcon },
+  ];
 
   const handlePlaceOrder = async () => {
     setLoading(true);
-    navigate("/orders")
-  }
+    navigate("/orders");
+  };
 
   useState(() => {
-    if(user?.addresses?.length) {
-      const defaultAddr = user.addresses.find((a) => a.isDefault) || user.addresses[0];
+    if (user?.addresses?.length) {
+      const defaultAddr =
+        user.addresses.find((a) => a.isDefault) || user.addresses[0];
       setAddress({
         _id: defaultAddr?._id,
         label: defaultAddr?.label,
@@ -56,16 +56,33 @@ const Checkout = () => {
         zip: defaultAddr?.zip,
         isDefault: defaultAddr?.isDefault,
         lat: defaultAddr?.lat,
-        lng: defaultAddr?.lng
-      })
+        lng: defaultAddr?.lng,
+      });
     }
-  })
+  });
 
-  return (
-    <div>
-      Checkout
-    </div>
-  )
-}
+  if (items.length === 0) {
+    return (
+      <div className="min-h-screen bg-app-cream flex-center">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-app-green mb-2">
+            Your cart is empty
+          </h2>
+          <p className="text-sm text-app-text-light mb-4">
+            Add some products to checkout
+          </p>
+          <button
+            onClick={() => navigate("/products")}
+            className="px-5 py-2.5 bg-app-green text-white text-sm font-medium rounded-xl hover:bg-app-green-light transition-colors"
+          >
+            Browse Products
+          </button>
+        </div>
+      </div>
+    );
+  }
 
-export default Checkout
+  return <div>Checkout</div>;
+};
+
+export default Checkout;
