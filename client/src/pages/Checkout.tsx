@@ -91,7 +91,16 @@ const Checkout = () => {
 
       <h1 className="text-2xl font-semibold text-app-green mb-8">Checkout</h1>
 
-      
+      {/* Steps */}
+      <div className="flex items-center gap-2 mb-8">
+        {steps.map((s, index) => (
+          <div key={s.key} className="flex items-center gap-2">
+            <button onClick={() => setStep(s.key)} className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${step === s.key ? "bg-app-green text-white" : "bg-white text-app-text-light"}`}>
+              <s.icon className="size-4" /> {s.label}
+            </button>
+          </div>
+        ))}
+      </div>
 
     </div>
   </div>;
