@@ -32,6 +32,12 @@ const SearchResult = () => {
           </span>
         </nav>
 
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-2xl font-semibold text-app-green mb-1">Search results for "{query}"</h1>
+          <p className="text-sm text-app-text-light">{loading ? "Searching..." : `${products.length} items found`}</p>
+        </div>
+
       </div>
     </div>
   )
