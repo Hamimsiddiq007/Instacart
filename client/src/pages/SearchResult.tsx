@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import type { Product } from "../types";
 import { Link, useSearchParams } from "react-router-dom";
 import { dummyProducts } from "../assets/assets";
-import { Home } from "lucide-react";
+import { Home, Search } from "lucide-react";
+import Loading from "../components/Loading";
+import ProductCard from "../components/ProductCard";
 
 const SearchResult = () => {
 
@@ -37,6 +39,26 @@ const SearchResult = () => {
           <h1 className="text-2xl font-semibold text-app-green mb-1">Search results for "{query}"</h1>
           <p className="text-sm text-app-text-light">{loading ? "Searching..." : `${products.length} items found`}</p>
         </div>
+
+        {/* Results */}
+        {loading ? (
+          <Loading/>
+        ) : products.length === 0 ? (
+          <div className="text-center py-20">
+            <Search className="size-16 text-app-border mx-auto mb-4" />
+            <h2 className="text-xl font-semibold text-app-green mb-2">No results found</h2>
+            <p className="text-sm text-app-text-light mb-6 max-w-md mx-auto">We couldn't find any results for "{query}". Try a different search term.</p>
+            <Link to="/products" className="inline-flex px-5 py-2.5 bg-app-green text-white text-sm font-medium rounded-lg">
+              Browse all products
+            </Link>
+          </div>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            {products.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </div>
+        )}
 
       </div>
     </div>
