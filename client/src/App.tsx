@@ -10,8 +10,14 @@ import FlashDeals from "./pages/FlashDeals"
 import Checkout from "./pages/Checkout"
 import MyOrders from "./pages/MyOrders"
 import OrderTracking from "./pages/OrderTracking"
-import Address from "./pages/Address"
 import ProtectedRoute from "./components/ProtectedRoute"
+import AdminLayout from "./pages/admin/AdminLayout"
+import AdminDashboard from "./pages/admin/AdminDashboard"
+import AdminProducts from "./pages/admin/AdminProducts"
+import AdminProductForm from "./pages/admin/AdminProductForm"
+import AdminOrders from "./pages/admin/AdminOrders"
+import Address from "./pages/Address"
+import AdminDeliveryPartners from "./pages/admin/AdminDeliveryPartners"
 
 
 const App = () => {
@@ -38,6 +44,15 @@ const App = () => {
           <Route path="orders/:id" element={<OrderTracking />} />
           <Route path="address" element={<Address />} />
         </Route>
+      </Route>
+      {/* Admin routes */}
+      <Route path="/admin" element={<AdminLayout/>}>
+        <Route index element={<AdminDashboard/>} />
+        <Route path="products" element={<AdminProducts/>} />
+        <Route path="products/new" element={<AdminProductForm/>} />
+        <Route path="products/:id/edit" element={<AdminProductForm/>} />
+        <Route path="orders" element={<AdminOrders/>} />
+        <Route path="delivery-partners" element={<AdminDeliveryPartners/>} />
       </Route>
     </Routes>
      
