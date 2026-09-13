@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { PackageIcon, NavigationIcon } from "lucide-react";
-import OtpModal from "../../components/Delivery/OtpModal";
-import CancelModal from "../../components/Delivery/CancelModal";
+import OtpModal from "../../components/Delivery/OtpModel";
+import CancelModal from "../../components/Delivery/CancelModel";
 import DeliveryOrderCard from "../../components/Delivery/DeliveryOrderCard";
 import Loading from "../../components/Loading";
 import type { Order } from "../../types";
