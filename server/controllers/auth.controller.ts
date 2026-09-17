@@ -43,4 +43,7 @@ export const register = async (req: Request, res: Response) => {
 
     const userData: any = {...user};
     delete userData.password;
+    userData.isAdmin = getAdminStatus(userData.email);
+
+    res.status(201).json({user: userData, token});
 }
