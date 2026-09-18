@@ -64,3 +64,13 @@ export const createProduct = async (req: Request, res: Response) => {
 
     res.status(201).json({product});
 }
+
+// PUT /api/products/:id
+export const updateProduct = async (req: Request, res: Response) => {
+    const product = await prisma.product.update({
+        where: {id: req.params.id as string},
+        data: req.body
+    });
+
+    res.json({product});
+}
