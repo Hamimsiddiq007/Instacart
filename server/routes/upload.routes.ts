@@ -22,7 +22,11 @@ router.post("/", auth, upload.single("image"), async (req, res) => {
             resource_type: "auto",
         });
 
+        res.status(200).json({ url: result.secure_url });
+
     } catch (error) {
         res.status(500).json({ message: "Error uploading image" });
     }
 })
+
+export default router;
