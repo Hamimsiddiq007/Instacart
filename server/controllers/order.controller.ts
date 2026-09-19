@@ -21,6 +21,13 @@ export const createOrder = async (req: e.Request, res: e.Response) => {
 
         products.forEach((product: any) => (productMap[product.id] = product));
 
+        for (const item of items) {
+            const product = productMap[item.product];
+            if (!product || (product.stock ?? 0) < item.quantity) {
+                return res.status(404).json({ message: `Product ${item.product} is out of stock` });
+            }
+        }
+
     } catch (error) {
         res.status(500).json({ message: "Error creating order" });
     }
