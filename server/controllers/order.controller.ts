@@ -28,6 +28,24 @@ export const createOrder = async (req: e.Request, res: e.Response) => {
             }
         }
 
+        const orderItems = items.map((item: any) => {
+            const dbProduct = productMap[item.product];
+            if (!dbProduct) throw new Error(`Product ${item.product} not found`);
+            return {
+                product: dbProduct.id,
+                name: dbProduct.name,
+                image: dbProduct.image,
+                price: dbProduct.price,
+                quantity: item.quantity,
+                unit: dbProduct.unit,
+            };
+        });
+
+        const subtotal = orderItems.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
+        const delivaryFee = subtotal > 20 ? 0 : 1.99;
+        const tax = Math.round(subtotal * 0.08 * 100) / 100;
+        const total = Math.round((subtotal + delivaryFee + tax) * 100) / 100;
+
     } catch (error) {
         res.status(500).json({ message: "Error creating order" });
     }
