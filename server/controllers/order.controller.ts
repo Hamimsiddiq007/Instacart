@@ -42,9 +42,23 @@ export const createOrder = async (req: e.Request, res: e.Response) => {
         });
 
         const subtotal = orderItems.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
-        const delivaryFee = subtotal > 20 ? 0 : 1.99;
+        const deliveryFee = subtotal > 20 ? 0 : 1.99;
         const tax = Math.round(subtotal * 0.08 * 100) / 100;
         const total = Math.round((subtotal + delivaryFee + tax) * 100) / 100;
+
+        const order = await prisma.order.create({
+            data: {
+                userId: req.user!.id,
+                items: orderItems,
+                shippingAddress,
+                paymentMethod,
+                subtotal,
+                deliveryFee,
+                tax,
+                total,
+                statusHistory: [{status: "placed", note: "Order placed successfully", timestamp: new Date()}],
+            }
+        })
 
     } catch (error) {
         res.status(500).json({ message: "Error creating order" });
