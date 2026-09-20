@@ -164,3 +164,22 @@ export const updateOrderStatus = async (req: e.Request, res: e.Response) => {
     res.status(500).json({ message: "Error updating order status" });
   }
 }
+
+// Get all orders (admin)
+export const getAllOrders = async (req: e.Request, res: e.Response) => {
+  try {
+    const orders = await prisma.order.findMany({
+      where: {NOT: [{paymentMethod: "card", isPaid: false}]},
+      include: {
+        user: {select: {name: true, email: true}},
+        deliveryPartner: {select: {name: true, phone: true, email: true}},
+      },
+      orderBy: {createdAt: "desc"},
+    });
+
+    res.status(200).json({orders});
+    
+  } catch (error) {
+    res.status(500).json({ message: "Error getting all orders" });
+  }
+}
