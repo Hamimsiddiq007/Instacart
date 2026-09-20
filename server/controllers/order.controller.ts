@@ -96,7 +96,7 @@ export const createOrder = async (req: e.Request, res: e.Response) => {
 };
 
 // Get users orders
-export const getUsersOrders = async (req: e.Request, res: e.Response) => {
+export const getUserOrders = async (req: e.Request, res: e.Response) => {
   try {
     const {status} = req.query;
     const where: any = {
@@ -121,3 +121,21 @@ export const getUsersOrders = async (req: e.Request, res: e.Response) => {
   }
 };
 
+// Get single order
+export const getOrder = async (req: e.Request, res: e.Response) => {
+  try {
+    const order = await prisma.order.findFirst({
+      where: {id: req.params.id as string, userId: req.user!.id},
+      include: {deliveryPartner: {select: {name: true, phone: true, avatar: true, vehicleType: true}}},
+    })
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json({order});
+
+  } catch (error) {
+    res.status(500).json({ message: "Error getting order" });
+  }
+}
