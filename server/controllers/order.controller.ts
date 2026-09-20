@@ -94,3 +94,30 @@ export const createOrder = async (req: e.Request, res: e.Response) => {
     res.status(500).json({ message: "Error creating order" });
   }
 };
+
+// Get users orders
+export const getUsersOrders = async (req: e.Request, res: e.Response) => {
+  try {
+    const {status} = req.query;
+    const where: any = {
+      userId: req.user!.id,
+      NOT: [{paymentMethod: "card", isPaid: false}],
+    }
+
+    if (status && status !== "all") {
+      where.status = status;
+    }
+
+    const orders = await prisma.order.findMany({
+      where,
+      include: {deliveryPartner: {select: {name: true, phone: true}}},
+      orderBy: {createdAt: "desc"},
+    })
+
+    res.status(200).json({orders});
+
+  } catch (error) {
+    res.status(500).json({ message: "Error getting orders" });
+  }
+};
+
