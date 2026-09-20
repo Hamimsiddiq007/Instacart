@@ -139,3 +139,28 @@ export const getOrder = async (req: e.Request, res: e.Response) => {
     res.status(500).json({ message: "Error getting order" });
   }
 }
+
+// Update order status (admin)
+export const updateOrderStatus = async (req: e.Request, res: e.Response) => {
+  try {
+    const {status, note} = req.body;
+    const order = await prisma.order.findUnique({where: {id: req.params.id as string}})
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    const history = (Array.isArray(order.statusHistory) ? order.statusHistory : []) as any[];
+    history.push({status, note: note || `Order ${status.toLowerCase()}`, timestamp: new Date()});
+
+    const updatedOrder = await prisma.order.update({
+      where: {id: req.params.id as string},
+      data: {statusHistory: history},
+    })
+
+    res.status(200).json({order: updatedOrder});
+
+  } catch (error) {
+    res.status(500).json({ message: "Error updating order status" });
+  }
+}
