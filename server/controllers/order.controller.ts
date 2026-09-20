@@ -178,8 +178,27 @@ export const getAllOrders = async (req: e.Request, res: e.Response) => {
     });
 
     res.status(200).json({orders});
-    
+
   } catch (error) {
     res.status(500).json({ message: "Error getting all orders" });
+  }
+}
+
+// Get Order Location
+export const getOrderLocation = async (req: e.Request, res: e.Response) => {
+  try {
+    const order = await prisma.order.findFirst({
+      where: {id: req.params.id as string, userId: req.user!.id},
+      select: {liveLocation: true, status: true},
+    })
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json({liveLocation: order.liveLocation, status: order.status});
+
+  } catch (error) {
+    res.status(500).json({ message: "Error getting order location" });
   }
 }
