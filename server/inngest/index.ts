@@ -1,5 +1,6 @@
 import { Inngest } from "inngest";
 import { prisma } from "../config/prisma.js";
+import sendEmail from "../config/nodemailer.js";
 
 const LOW_STOCK_THRESHOLD = 10;
 
@@ -41,10 +42,17 @@ const ckeckLowStock = inngest.createFunction(
         const adminEmails = process.env.ADMIN_EMAILS ? process.env.ADMIN_EMAILS.split(",").map((e) => e.trim().toLowerCase()) : [];
 
         if (adminEmails.length === 0) return {skipped: true, reason: "No admin emails"};
+
+        await sendEmail({
+          to: adminEmails.join(","),
+          subject: `Low Stock Alert ${product.name}`,
+          body: `<p>Product ${product.name} is low in stock (${product.stock})</p>`
+        })
     })
+    return {alertSent: true, product: product.name, stock: product?.stock};
   },
 );
 
 
 // Create an empty array where we'll export future Inngest functions
-export const functions = [];
+export const functions = [ckeckLowStock];
