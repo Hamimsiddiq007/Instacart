@@ -184,5 +184,78 @@ const sendMonthlyOffer = inngest.createFunction(
   },
 );
 
+// Auto assign rider after 5 minutes
+const assignRider = inngest.createFunction(
+  {
+    id: "assign-rider",
+    name: "Auto Assign Delivery Rider",
+    triggers: [{ event: "order/placed" }],
+  },
+  async ({ event, step }) => {
+    const { orderId } = event.data;
+
+    // Wait 5 minutes
+    await step.sleep("wait-5-min", "5m");
+
+    const result = await step.run("assign-rider", async () => {
+      const order = await prisma.order.findUnique({ where: { id: orderId } });
+
+      if (!order) {
+        return { skipped: true, reason: "Order not found" };
+      }
+      if (order.deliveryPartnerId)
+        return { skipped: true, reason: "Rider already assigned" };
+      if (["delivered", "cancelled"].includes(order.status as string))
+        return { skipped: true, reason: `Order is ${order.status}` };
+
+      const busyOrder = await prisma.order.findMany({
+        where: {
+          status: { in: ["Assigned", "Packed", "Out for Delivery"] },
+          deliveryPartnerId: { not: null },
+        },
+        select: { deliveryPartnerId: true },
+      });
+      const busyRiders = busyOrder.map((o) => o.deliveryPartnerId);
+
+      const availableRiders = await prisma.deliveryPartner.findFirst({
+        where: {
+          isActive: true,
+          id: { notIn: busyRiders as string[] },
+        },
+      });
+      if (!availableRiders)
+        return { skipped: true, reason: "No available riders" };
+
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+      const history = (
+        Array.isArray(order.statusHistory) ? order.statusHistory : []
+      ) as any[];
+      history.push({
+        status: "Assigned",
+        note: `Assigned to ${availableRiders.name}`,
+        timestamp: new Date(),
+      });
+
+      await prisma.order.update({
+        where: { id: orderId },
+        data: {
+          deliveryPartnerId: availableRiders.id,
+          deliveryOtp: otp,
+          status: "Assigned",
+          statusHistory: history,
+        },
+      });
+      return {
+        assigned: true,
+        riderId: availableRiders.id,
+        riderName: availableRiders.name,
+        orderId: orderId,
+      };
+    });
+    return result;
+  },
+);
+
 // Create an empty array where we'll export future Inngest functions
-export const functions = [ckeckLowStock];
+export const functions = [ckeckLowStock, sendMonthlyOffer, assignRider];
