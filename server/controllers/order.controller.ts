@@ -1,5 +1,6 @@
 import e from "express";
 import { prisma } from "../config/prisma.js";
+import { inngest } from "../inngest/index.js";
 
 // Create orders
 export const createOrder = async (req: e.Request, res: e.Response) => {
@@ -90,6 +91,16 @@ export const createOrder = async (req: e.Request, res: e.Response) => {
         },
       });
     }
+
+    // Send order confirmation email
+    for (const item of items) {
+      await inngest.send({
+        name: "inventory/stock.updated",
+        data: { productId: item.product },
+      });
+    }
+
+    await inngest.send({ name: "order/placed", data: { orderId: order.id } });
   } catch (error) {
     res.status(500).json({ message: "Error creating order" });
   }
@@ -98,11 +109,11 @@ export const createOrder = async (req: e.Request, res: e.Response) => {
 // Get users orders
 export const getUserOrders = async (req: e.Request, res: e.Response) => {
   try {
-    const {status} = req.query;
+    const { status } = req.query;
     const where: any = {
       userId: req.user!.id,
-      NOT: [{paymentMethod: "card", isPaid: false}],
-    }
+      NOT: [{ paymentMethod: "card", isPaid: false }],
+    };
 
     if (status && status !== "all") {
       where.status = status;
@@ -110,12 +121,11 @@ export const getUserOrders = async (req: e.Request, res: e.Response) => {
 
     const orders = await prisma.order.findMany({
       where,
-      include: {deliveryPartner: {select: {name: true, phone: true}}},
-      orderBy: {createdAt: "desc"},
-    })
+      include: { deliveryPartner: { select: { name: true, phone: true } } },
+      orderBy: { createdAt: "desc" },
+    });
 
-    res.status(200).json({orders});
-
+    res.status(200).json({ orders });
   } catch (error) {
     res.status(500).json({ message: "Error getting orders" });
   }
@@ -125,80 +135,90 @@ export const getUserOrders = async (req: e.Request, res: e.Response) => {
 export const getOrder = async (req: e.Request, res: e.Response) => {
   try {
     const order = await prisma.order.findFirst({
-      where: {id: req.params.id as string, userId: req.user!.id},
-      include: {deliveryPartner: {select: {name: true, phone: true, avatar: true, vehicleType: true}}},
-    })
+      where: { id: req.params.id as string, userId: req.user!.id },
+      include: {
+        deliveryPartner: {
+          select: { name: true, phone: true, avatar: true, vehicleType: true },
+        },
+      },
+    });
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    res.status(200).json({order});
-
+    res.status(200).json({ order });
   } catch (error) {
     res.status(500).json({ message: "Error getting order" });
   }
-}
+};
 
 // Update order status (admin)
 export const updateOrderStatus = async (req: e.Request, res: e.Response) => {
   try {
-    const {status, note} = req.body;
-    const order = await prisma.order.findUnique({where: {id: req.params.id as string}})
+    const { status, note } = req.body;
+    const order = await prisma.order.findUnique({
+      where: { id: req.params.id as string },
+    });
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    const history = (Array.isArray(order.statusHistory) ? order.statusHistory : []) as any[];
-    history.push({status, note: note || `Order ${status.toLowerCase()}`, timestamp: new Date()});
+    const history = (
+      Array.isArray(order.statusHistory) ? order.statusHistory : []
+    ) as any[];
+    history.push({
+      status,
+      note: note || `Order ${status.toLowerCase()}`,
+      timestamp: new Date(),
+    });
 
     const updatedOrder = await prisma.order.update({
-      where: {id: req.params.id as string},
-      data: {statusHistory: history},
-    })
+      where: { id: req.params.id as string },
+      data: { statusHistory: history },
+    });
 
-    res.status(200).json({order: updatedOrder});
-
+    res.status(200).json({ order: updatedOrder });
   } catch (error) {
     res.status(500).json({ message: "Error updating order status" });
   }
-}
+};
 
 // Get all orders (admin)
 export const getAllOrders = async (req: e.Request, res: e.Response) => {
   try {
     const orders = await prisma.order.findMany({
-      where: {NOT: [{paymentMethod: "card", isPaid: false}]},
+      where: { NOT: [{ paymentMethod: "card", isPaid: false }] },
       include: {
-        user: {select: {name: true, email: true}},
-        deliveryPartner: {select: {name: true, phone: true, email: true}},
+        user: { select: { name: true, email: true } },
+        deliveryPartner: { select: { name: true, phone: true, email: true } },
       },
-      orderBy: {createdAt: "desc"},
+      orderBy: { createdAt: "desc" },
     });
 
-    res.status(200).json({orders});
-
+    res.status(200).json({ orders });
   } catch (error) {
     res.status(500).json({ message: "Error getting all orders" });
   }
-}
+};
 
 // Get Order Location
 export const getOrderLocation = async (req: e.Request, res: e.Response) => {
   try {
     const order = await prisma.order.findFirst({
-      where: {id: req.params.id as string, userId: req.user!.id},
-      select: {liveLocation: true, status: true},
-    })
+      where: { id: req.params.id as string, userId: req.user!.id },
+      select: { liveLocation: true, status: true },
+    });
 
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    res.status(200).json({liveLocation: order.liveLocation, status: order.status});
-
+    res
+      .status(200)
+      .json({ liveLocation: order.liveLocation, status: order.status });
   } catch (error) {
     res.status(500).json({ message: "Error getting order location" });
   }
-}
+};
