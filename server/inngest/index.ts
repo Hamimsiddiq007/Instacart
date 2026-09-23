@@ -1,4 +1,4 @@
-import { Inngest } from "inngest";
+import { cron, Inngest } from "inngest";
 import { prisma } from "../config/prisma.js";
 import sendEmail from "../config/nodemailer.js";
 
@@ -52,6 +52,28 @@ const ckeckLowStock = inngest.createFunction(
     return {alertSent: true, product: product.name, stock: product?.stock};
   },
 );
+
+// Monthley offer email
+const sendMonthlyOffer = inngest.createFunction({
+  id: "send-monthly-offer",
+  name: "Monthly Payday Offer",
+  triggers: [cron("0 10 1 * *")],
+}, async ({step}) => {
+  const {deals, users} = await step.run("fetch-deals-and-users", async () => {
+    const products = await prisma.product.findMany({
+      where: {stock: {gt: 0}},
+      orderBy: {originalPrice: "desc"},
+      take: 6
+    })
+
+    const allUsers = await prisma.user.findMany({select: {name: true, email: true}});
+    return {deals: products, users: allUsers};
+  })
+
+  if(users.length === 0 || deals.length === 0) return {skipped: true, reason: "No users or deals"};
+
+  let sentCount = 0;
+})
 
 
 // Create an empty array where we'll export future Inngest functions
