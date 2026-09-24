@@ -23,6 +23,13 @@ app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/orders", orderRouter);
+app.get("/api/debug-inngest", (req: Request, res: Response) => {
+  res.json({
+    signingKeyExists: !!process.env.INNGEST_SIGNING_KEY,
+    eventKeyExists: !!process.env.INNGEST_EVENT_KEY,
+    nodeEnv: process.env.NODE_ENV,
+  });
+});
 app.use("/api/inngest", serve({ client: inngest, functions }));
 
 // Error handling middleware
