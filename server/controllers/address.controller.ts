@@ -93,5 +93,21 @@ export const updateAddress = async (req: Request, res: Response) => {
         where: {userId: req.user!.id},
         orderBy: {createdAt: "asc"}
     })
-    res.status(200).json({addresses})   
+    res.status(200).json({addresses})
+}
+
+// Delete Address
+export const deleteAddress = async (req: Request, res: Response) => {
+    try {
+        await prisma.address.delete({
+            where: {id: req.params.id as string}
+        })
+    } catch (error) {
+        return res.status(404).json({message: "Address not found"});
+    }
+    const addresses = await prisma.address.findMany({
+        where: {userId: req.user!.id},
+        orderBy: {createdAt: "asc"}
+    })
+    res.status(200).json({addresses})
 }
