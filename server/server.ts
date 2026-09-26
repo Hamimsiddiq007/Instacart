@@ -8,6 +8,7 @@ import orderRouter from "./routes/order.route.js";
 import { serve } from "inngest/express";
 import { inngest, functions } from "./inngest/index.js";
 import addressRouter from "./routes/address.route.js";
+import adminRouter from "./routes/admin.route.js";
 
 const app = express();
 
@@ -32,7 +33,8 @@ app.get("/api/debug-inngest", (req: Request, res: Response) => {
   });
 });
 app.use("/api/inngest", serve({ client: inngest, functions }));
-app.use("/api/address", addressRouter)
+app.use("/api/address", addressRouter);
+app.use("/api/admin", adminRouter);
 
 // Error handling middleware
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
