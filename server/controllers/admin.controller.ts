@@ -91,3 +91,51 @@ export const updateDeliveryPartner = async (req: Request, res: Response) => {
         res.status(500).json({ message: "Error updating delivery partner" });
     }
 }
+
+// Assign delivery partner for order
+export const assignDeliveryPartner = async (req: Request, res: Response) => {
+    const {partnerId} = req.body;
+
+    try {
+        const order = await prisma.order.findUnique({
+            where: {id: req.params.id as string},
+        })
+
+        const partner = await prisma.deliveryPartner.findUnique({
+            where: {id: partnerId as string},
+        })
+
+        if(!order || !partner) {
+            return res.status(404).json({ message: "Order or delivery partner not found" });
+        }
+
+        const otp = Math.floor(100000 + Math.random() * 900000);
+
+        let status = order!.status;
+
+        const history: any[] = Array.isArray(order!.statusHistory) ? order!.statusHistory : [];
+
+        if(order!.status === "Placed" || order!.status === "Confirmed") {
+            status = "Assigned";
+            history.push({
+                status: "Assigned",
+                note: `Assigned to ${partner!.name}`,
+                timestamp: new Date(),
+            })
+        }
+
+        await prisma.order.update({
+            where: {id: order!.id},
+            data: {
+                deliveryPartnerId: partner!.id,
+                deliveryotp: otp.toString(),
+                status,
+                statusHistory: history,
+            }
+        })
+
+        res.status(200).json({ order });
+    } catch (error) {
+        res.status(500).json({ message: "Error assigning delivery partner" });
+    }
+}
