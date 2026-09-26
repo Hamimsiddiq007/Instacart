@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma.js";
+import bcrypt from "bcrypt";
 
 // Get admin dashboard data
 export const getAdminStats = async (req: Request, res: Response) => {
@@ -44,4 +45,27 @@ export const getDeliveryPartners = async (req: Request, res: Response) => {
     orderBy: { createdAt: "desc" },
   });
   res.status(200).json({ deliveryPartners });
+};
+
+// Create delivery partners profile
+export const createDeliveryPartner = async (req: Request, res: Response) => {
+    const {name, email, password, phone, vehicleType} = req.body;
+
+    if (!name || !email || !password || !phone || !vehicleType) {
+        return res.status(400).json({ message: "Please provide all fields" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const partner = await prisma.deliveryPartner.create({
+        data: {
+            name,
+            email: email.toLowerCase(),
+            password: hashedPassword,
+            phone,
+            vehicleType,
+        }
+    })
+
+    res.status(201).json({ partner });
 };
