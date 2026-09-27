@@ -76,3 +76,34 @@ export const getDeliveryDetails = async (req: Request, res: Response) => {
 
     res.status(200).json({ order });
 }
+
+// Complete delivery with otp
+export const completeDelivery = async (req: Request, res: Response) => {
+    const { otp } = req.body;
+
+    const order = await prisma.order.findFirst({
+        where: { id: req.params.id as string, deliveryPartnerId: req.partner!.id }
+    })
+
+    if (!order || order.status === "Delivered" || order.status === "Cancelled") {
+        return res.status(404).json({ message: "Invalid request" });
+    }
+
+    if(order.deliveryOtp !== otp) {
+        return res.status(401).json({ message: "Invalid OTP" });
+    }
+
+    const history = order.statusHistory as any[];
+    history.push({
+        status: "Delivered",
+        note: `Delivered by ${req.partner!.name}`,
+        timestamp: new Date(),
+    })
+
+    const updatedOrder = await prisma.order.update({
+        where: { id: order.id },
+        data: { status: "Delivered", statusHistory: history, deliveryOtp: "" }
+    })
+
+    res.status(200).json({ order: updatedOrder, message: "Delivery completed successfully" });
+}
