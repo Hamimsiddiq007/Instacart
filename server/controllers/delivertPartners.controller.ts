@@ -1,7 +1,11 @@
 import { Request, Response } from "express";
 import { prisma } from "../config/prisma.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
+const generateToken = (id: string) => {
+    return jwt.sign({id, role: "delivery"}, process.env.JWT_SECRET as string, {expiresIn: "30d"});
+};
 
 // Login delivery partner
 export const loginDeliveryPartner = async (req: Request, res: Response) => {
@@ -25,4 +29,6 @@ export const loginDeliveryPartner = async (req: Request, res: Response) => {
     if (!isMatch) {
         return res.status(401).json({ message: "Invalid password" });
     }
+
+    const token = generateToken(partner.id);
 };
