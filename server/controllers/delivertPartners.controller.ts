@@ -46,7 +46,7 @@ export const loginDeliveryPartner = async (req: Request, res: Response) => {
 export const getMyDeliveries = async (req: Request, res: Response) => {
   const { status } = req.query;
 
-  const where: any = { deliveryPartnerId: req.user!.id };
+  const where: any = { deliveryPartnerId: req.partner!.id };
 
   if (status === "active") {
     where.status = { in: ["Assigned", "Packed", "Out for Delivery"] };
@@ -62,3 +62,17 @@ export const getMyDeliveries = async (req: Request, res: Response) => {
 
   res.status(200).json({ orders });
 };
+
+// Get single delivery details
+export const getDeliveryDetails = async (req: Request, res: Response) => {
+    const order = await prisma.order.findFirst({
+        where: { id: req.params.id as string, deliveryPartnerId: req.partner!.id },
+        include: { user: { select: { name: true, email: true, phone: true } } },
+    })
+
+    if (!order) {
+        return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json({ order });
+}
