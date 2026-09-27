@@ -31,4 +31,7 @@ export const loginDeliveryPartner = async (req: Request, res: Response) => {
     }
 
     const token = generateToken(partner.id);
+    const {password: _, ...partnerData} = partner;
+
+    res.json({partner: partnerData, token});
 };
