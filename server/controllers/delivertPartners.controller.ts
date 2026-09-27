@@ -134,3 +134,31 @@ export const cancelDelivery = async (req: Request, res: Response) => {
 
     res.status(200).json({ order: updatedOrder, message: "Delivery cancelled" });
 }
+
+// Update order status
+export const updateOrderStatus = async (req: Request, res: Response) => {
+    const {status} = req.body;
+    const allowedStatus = ["Packed", "Out for Delivery"];
+
+    if(!allowedStatus.includes(status)) {
+        return res.status(400).json({ message: "Invalid status" });
+    }
+
+    const order = await prisma.order.findFirst({
+        where: { id: req.params.id as string, deliveryPartnerId: req.partner!.id }
+    })
+
+    const history = order!.statusHistory as any[];
+    history.push({
+        status,
+        note: `${status}. Updated by ${req.partner!.name}`,
+        timestamp: new Date(),
+    })
+
+    const updatedOrder = await prisma.order.update({
+        where: { id: order!.id },
+        data: { status, statusHistory: history }
+    })
+
+    res.status(200).json({ order: updatedOrder, message: "Status updated successfully" });
+}
