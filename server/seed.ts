@@ -402,7 +402,7 @@ const seedDB = async () => {
         data: products
     })
 
-    console.log(`Crealed ${products.length} products`);
+    console.log(`Created ${products.length} products`);
     console.log(`Seeding completed successfully`);
     process.exit(0);
   } catch (error) {
