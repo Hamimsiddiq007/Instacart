@@ -16,9 +16,10 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/authContext";
 
 const Navbar = () => {
-  const user: any = {name: 'John Doe', email: 'johndoe@example.com'}
+  const {user, logout} = useAuth();
   const { cartCount, setIsCartOpen } = useCart();
   const [searchQuery, setSearchQuery] = useState("");
   const [userManuOpen, setUserManuOpen] = useState(false);
@@ -34,6 +35,7 @@ const Navbar = () => {
   }
 
   const handleLogout = () => {
+    logout();
     setUserManuOpen(false);
     navigate('/')
   }
