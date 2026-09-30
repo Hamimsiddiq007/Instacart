@@ -42,6 +42,19 @@ const login = async (email: string, password: string) => {
     toast.error(error.response.data.message || error.message);
   }
 }
+const register = async (name: string, email: string, password: string) => {
+  try {
+    const {data} = await api.post("/auth/register", {name, email, password});
+    setUser(data.user);
+    setToken(data.token);
+    localStorage.setItem("auth_token", data.token);
+    localStorage.setItem("auth_user", JSON.stringify(data.user));
+    toast.success("Registered successfully!");
+    navigate("/");
+  } catch (error: any) {
+    toast.error(error.response.data.message || error.message);
+  }
+}
 
 const authContext = createContext<AuthContextType | undefined>(undefined);
 
