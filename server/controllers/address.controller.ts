@@ -111,20 +111,3 @@ export const deleteAddress = async (req: Request, res: Response) => {
     })
     res.status(200).json({addresses})
 }
-
-//testing
-export const setDefaultAddress = async (req: Request, res: Response) => {
-    try {
-        await prisma.address.update({
-            where: {id: req.params.id as string},
-            data: {isDefault: true}
-        })
-    } catch (error) {
-        return res.status(404).json({message: "Address not found"});
-    }
-    const addresses = await prisma.address.findMany({
-        where: {userId: req.user!.id},
-        orderBy: {createdAt: "asc"}
-    })
-    res.status(200).json({addresses})
-}
