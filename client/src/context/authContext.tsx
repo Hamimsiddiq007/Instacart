@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { User } from "../types";
 import { useNavigate } from "react-router-dom";
+import api from "../config/api";
+import toast from "react-hot-toast";
 
 interface AuthContextType {
   user: User | null;
@@ -26,6 +28,20 @@ useEffect(() => {
    }
    setLoading(false);
 },[])
+
+const login = async (email: string, password: string) => {
+  try {
+    const {data} = await api.post("/auth/login", {email, password});
+    setUser(data.user);
+    setToken(data.token);
+    localStorage.setItem("auth_token", data.token);
+    localStorage.setItem("auth_user", JSON.stringify(data.user));
+    toast.success("Logged in successfully!");
+    navigate("/");
+  } catch (error: any) {
+    toast.error(error.response.data.message || error.message);
+  }
+}
 
 const authContext = createContext<AuthContextType | undefined>(undefined);
 
