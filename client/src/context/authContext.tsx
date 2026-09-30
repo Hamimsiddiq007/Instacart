@@ -56,6 +56,13 @@ const register = async (name: string, email: string, password: string) => {
   }
 }
 
+const logout = () => {
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("auth_token");
+    localStorage.removeItem("auth_user");
+}
+
 const authContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
