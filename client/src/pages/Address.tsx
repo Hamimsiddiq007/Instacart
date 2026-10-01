@@ -6,6 +6,8 @@ import Loading from "../components/Loading";
 import AddressCard from "../components/AddressCard";
 import AddressForm from "../components/AddressForm";
 import { useAuth } from "../context/authContext";
+import api from "../config/api";
+import toast from "react-hot-toast";
 
 const Address = () => {
 
@@ -72,9 +74,23 @@ const Address = () => {
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
     try {
-      const coords = await 
-    } catch (error) {
-      
+      const coords = await getLocation();
+      const payload = {...form, ...coords}
+
+      if(editigId){
+        const {data} = await api.put(`/address/${editigId}`, payload);
+        setAddresses(data.addresses);
+        updateUser({addresses: data.addresses});
+        toast.success("Address updated successfully")
+      } else{
+        const {data} = await api.post(`/address`, payload);
+        setAddresses(data.addresses);
+        updateUser({addresses: data.addresses});
+        toast.success("Address added successfully")
+      }
+      resetForm();
+    } catch (error: any) {
+      toast.error( error.response?.data?.message || error.message);
     }
   };
 
