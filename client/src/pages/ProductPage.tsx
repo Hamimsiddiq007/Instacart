@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import DummyReviewsSection from "../assets/DummyReviewsSection";
 import ProductCard from "../components/ProductCard";
+import api from "../config/api";
 
 const ProductPage = () => {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL;
@@ -51,18 +52,18 @@ const ProductPage = () => {
     setLoading(true);
     setLocalQuantity(1);
     window.scrollTo(0, 0);
-    const product = dummyProducts.find((product) => product.id === id);
-    if (!product) {
-      setLoading(false);
-      return;
-    }
-    setProduct(product!);
-    setRelatedProducts(
-      dummyProducts.filter(
-        (item) => item.category === product.category && item.id !== id,
-      ),
-    );
-    setLoading(false);
+    api
+      .get(`/products/${id}`)
+      .then(({ data }) => {
+        setProduct(data.product);
+        return api.get(`/products?category=${data.product.category}`);
+      })
+      .then(({ data }) => {
+        setRelatedProducts(data.products.filter((p: Product) => p.id !== id));
+        setLoading(false);
+      })
+      .catch(() => navigate("/products"))
+      .finally(() => setLoading(false));
   }, [id, navigate]);
 
   if (loading) return <Loading />;
