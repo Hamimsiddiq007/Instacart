@@ -33,8 +33,8 @@ const ProductPage = () => {
 
     if (inCart) {
       if (cartItem!.quantity > 1) {
-        updateQuantity(product._id, cartItem!.quantity - 1);
-      } else removeFromCart(product._id);
+        updateQuantity(product.id, cartItem!.quantity - 1);
+      } else removeFromCart(product.id);
     } else {
       setLocalQuantity(Math.max(1, localQuantity - 1));
     }
@@ -43,7 +43,7 @@ const ProductPage = () => {
   const handlePlus = () => {
     if (!product) return;
 
-    if (inCart) updateQuantity(product._id, cartItem!.quantity + 1);
+    if (inCart) updateQuantity(product.id, cartItem!.quantity + 1);
     else setLocalQuantity(localQuantity + 1);
   };
 
@@ -68,7 +68,7 @@ const ProductPage = () => {
   if (loading) return <Loading />;
   if (!product) return null;
 
-  const cartItem = items.find((item) => item.product._id === product._id);
+  const cartItem = items.find((item) => item.product.id === product.id);
   const inCart = !!cartItem;
   const displayQuantity = inCart ? cartItem!.quantity : localQuantity;
 
@@ -245,10 +245,7 @@ const ProductPage = () => {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 xl:gap-8">
               {relatedProducts.slice(0, 5).map((relatedProduct) => (
-                <ProductCard
-                  key={relatedProduct._id}
-                  product={relatedProduct}
-                />
+                <ProductCard key={relatedProduct.id} product={relatedProduct} />
               ))}
             </div>
           </section>

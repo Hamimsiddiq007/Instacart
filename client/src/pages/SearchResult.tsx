@@ -7,18 +7,21 @@ import Loading from "../components/Loading";
 import ProductCard from "../components/ProductCard";
 
 const SearchResult = () => {
-
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchParams] = useSearchParams();
   const query = searchParams.get("q") || "";
 
-  useEffect(()=> {
-    if(!query) return;
+  useEffect(() => {
+    if (!query) return;
     setLoading(true);
-    setProducts(dummyProducts.filter((p: any) => p.name.toLowerCase().includes(query.toLowerCase())));
+    setProducts(
+      dummyProducts.filter((p: any) =>
+        p.name.toLowerCase().includes(query.toLowerCase()),
+      ),
+    );
     setLoading(false);
-  },[query])
+  }, [query]);
 
   return (
     <div className="min-h-screen bg-app-cream">
@@ -29,40 +32,49 @@ const SearchResult = () => {
             <Home className="size-4" />
           </Link>
           <span>/</span>
-          <span className="text-app-green font-medium">
-            Search Results
-          </span>
+          <span className="text-app-green font-medium">Search Results</span>
         </nav>
 
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-2xl font-semibold text-app-green mb-1">Search results for "{query}"</h1>
-          <p className="text-sm text-app-text-light">{loading ? "Searching..." : `${products.length} items found`}</p>
+          <h1 className="text-2xl font-semibold text-app-green mb-1">
+            Search results for "{query}"
+          </h1>
+          <p className="text-sm text-app-text-light">
+            {loading ? "Searching..." : `${products.length} items found`}
+          </p>
         </div>
 
         {/* Results */}
         {loading ? (
-          <Loading/>
+          <Loading />
         ) : products.length === 0 ? (
           <div className="text-center py-20">
             <Search className="size-16 text-app-border mx-auto mb-4" />
-            <h2 className="text-xl font-semibold text-app-green mb-2">No results found</h2>
-            <p className="text-sm text-app-text-light mb-6 max-w-md mx-auto">We couldn't find any results for "{query}". Try a different search term.</p>
-            <Link to="/products" className="inline-flex px-5 py-2.5 bg-app-green text-white text-sm font-medium rounded-lg">
+            <h2 className="text-xl font-semibold text-app-green mb-2">
+              No results found
+            </h2>
+            <p className="text-sm text-app-text-light mb-6 max-w-md mx-auto">
+              We couldn't find any results for "{query}". Try a different search
+              term.
+            </p>
+            <Link
+              to="/products"
+              className="inline-flex px-5 py-2.5 bg-app-green text-white text-sm font-medium rounded-lg"
+            >
               Browse all products
             </Link>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {products.map((product) => (
-              <ProductCard key={product._id} product={product} />
+              <ProductCard key={product.id} product={product} />
             ))}
           </div>
         )}
-
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default SearchResult
+export default SearchResult;

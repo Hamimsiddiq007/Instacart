@@ -51,7 +51,7 @@ const Products = () => {
   useEffect(() => {
     fetchProducts();
   }, [category, organic, sort, page, minPrice, maxPrice]);
-  
+
   return (
     <div className="min-h-screen bg-app-cream">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -146,7 +146,7 @@ const Products = () => {
                 {products.map(
                   (product) =>
                     product.stock > 0 && (
-                      <ProductCard key={product._id} product={product} />
+                      <ProductCard key={product.id} product={product} />
                     ),
                 )}
               </div>
