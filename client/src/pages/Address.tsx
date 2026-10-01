@@ -5,8 +5,12 @@ import { MapPinIcon, PlusIcon } from "lucide-react";
 import Loading from "../components/Loading";
 import AddressCard from "../components/AddressCard";
 import AddressForm from "../components/AddressForm";
+import { useAuth } from "../context/authContext";
 
 const Address = () => {
+
+  const {updateUser} = useAuth()
+
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -33,8 +37,45 @@ const Address = () => {
     setShowForm(false);
   };
 
+  const getLocation = (retries = 3): Promise<{lat: number, lng: number}> => {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new Error("Geolocation is not supported"));
+        return;
+      }
+
+      const attempt = () => {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            resolve({
+              lat: position.coords.latitude,
+              lng: position.coords.longitude,
+            })
+          }, (error: any) => {
+            if (retries > 0) {
+              retries--;
+              setTimeout(attempt, 1000); // Retry after 1 second
+            }else{
+              reject(new Error(error.message || "Unable to retrieve location"));
+            }
+          },
+      {
+        enableHighAccuracy: false,
+        timeout: 15000,
+        maximumAge: 60000,
+      })
+    }
+    attempt();
+  })
+  }
+
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
+    try {
+      const coords = await 
+    } catch (error) {
+      
+    }
   };
 
   const onEditHandler = (add: Address) => {
