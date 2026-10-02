@@ -176,7 +176,7 @@ export const updateOrderStatus = async (req: e.Request, res: e.Response) => {
 
     const updatedOrder = await prisma.order.update({
       where: { id: req.params.id as string },
-      data: { statusHistory: history },
+      data: { status, statusHistory: history },
     });
 
     res.status(200).json({ order: updatedOrder });
