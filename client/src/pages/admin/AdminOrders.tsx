@@ -51,9 +51,15 @@ export default function AdminOrders() {
 
   const handleAssign = async () => {
     if (!assignModal || !selectedPartner) return;
-    toast.success("Delivery partner assigned!");
-    setAssignModal(null);
-    setSelectedPartner("");
+    try {
+      await api.put(`/admin/orders/${assignModal}/assign`, { partnerId: selectedPartner });
+      toast.success("Delivery partner assigned!");
+      setAssignModal(null);
+      setSelectedPartner("");
+      fetchOrders(); // Refresh orders after assignment
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || error.message);
+    }
   };
 
   const statusOptions = [
