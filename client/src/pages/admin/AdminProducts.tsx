@@ -14,7 +14,7 @@ export default function AdminProducts() {
 
   const fetchProducts = async () => {
     try {
-      const {data} = await api.get("/products");
+      const { data } = await api.get("/products");
       setProducts(data.products);
     } catch (error: any) {
       toast.error(error.response?.data?.message || error.message);
@@ -34,7 +34,13 @@ export default function AdminProducts() {
       )
     )
       return;
-    console.log(id);
+    try {
+      await api.delete(`/products/${id}`);
+      toast.success("Product marked as out of stock!");
+      fetchProducts(); // Refresh products after status change
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || error.message);
+    }
   };
 
   if (loading) return <Loading />;
