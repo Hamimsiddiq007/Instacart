@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import type { Address } from "../types";
-import { dummyAddressData } from "../assets/assets";
 import { MapPinIcon, PlusIcon } from "lucide-react";
 import Loading from "../components/Loading";
 import AddressCard from "../components/AddressCard";
@@ -108,8 +107,13 @@ const Address = () => {
   };
 
   useEffect(() => {
-    setAddresses(dummyAddressData);
-    setLoading(false);
+    api.get("/address").then(({data}) => {
+      setAddresses(data.addresses);
+    }).catch((error: any) => {
+      toast.error(error.response?.data?.message || error.message);
+    }).finally(() => {
+      setLoading(false);
+    });
   }, []);
 
   return (
