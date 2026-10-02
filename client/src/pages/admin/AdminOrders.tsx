@@ -3,10 +3,6 @@ import { TruckIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import type { DeliveryPartner } from "../../types";
 import Loading from "../../components/Loading";
-import {
-  dummyDashboardOrdersData,
-  dummyDeliveryPartnerData,
-} from "../../assets/assets";
 import api from "../../config/api";
 
 export default function AdminOrders() {
@@ -44,7 +40,13 @@ export default function AdminOrders() {
   }, []);
 
   const handleStatusChange = async (id: string, newStatus: string) => {
-    console.log(id, newStatus);
+    try {
+      await api.put(`/orders/${id}/status`, { status: newStatus });
+      toast.success("Order status updated!");
+      fetchOrders(); // Refresh orders after status change
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || error.message);
+    }
   };
 
   const handleAssign = async () => {
