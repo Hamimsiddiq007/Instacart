@@ -30,8 +30,12 @@ export default function AdminOrders() {
   };
 
   const fetchPartners = async () => {
-    setPartners(dummyDeliveryPartnerData as any);
-    setTimeout(() => setLoading(false), 1000);
+    try {
+      const { data } = await api.get("/admin/delivery-partners");
+      setPartners(data.partners.filter((p: DeliveryPartner) => p.isActive));
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || error.message);
+    }
   };
 
   useEffect(() => {
