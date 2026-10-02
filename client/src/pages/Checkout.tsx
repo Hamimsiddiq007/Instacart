@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import type { Address } from "../types";
@@ -69,7 +69,7 @@ const Checkout = () => {
       }
       clearCart();
       toast.success("Order placed successfully");
-      navigate(`/orders/${data.order.id}`);
+      navigate(`/orders/${data.id}`);
 
     } catch (error: any) {
       toast.error(error.response?.data?.message || error.message);
@@ -79,7 +79,7 @@ const Checkout = () => {
     }
   };
 
-  useState(() => {
+  useEffect(() => {
     if (user?.addresses?.length) {
       const defaultAddr =
         user.addresses.find((a) => a.isDefault) || user.addresses[0];

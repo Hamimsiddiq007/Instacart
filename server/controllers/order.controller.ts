@@ -11,7 +11,7 @@ export const createOrder = async (req: e.Request, res: e.Response) => {
       return res.status(400).json({ message: "No order items" });
     }
 
-    const productIds = items.map((item: any) => item.product);
+    const productIds = items.map((item: any) => item.productId);
     const products = await prisma.product.findMany({
       where: {
         id: { in: productIds },
@@ -23,17 +23,17 @@ export const createOrder = async (req: e.Request, res: e.Response) => {
     products.forEach((product: any) => (productMap[product.id] = product));
 
     for (const item of items) {
-      const product = productMap[item.product];
+      const product = productMap[item.productId];
       if (!product || (product.stock ?? 0) < item.quantity) {
         return res
           .status(404)
-          .json({ message: `Product ${item.product} is out of stock` });
+          .json({ message: `Product ${item.productId} is out of stock` });
       }
     }
 
     const orderItems = items.map((item: any) => {
-      const dbProduct = productMap[item.product];
-      if (!dbProduct) throw new Error(`Product ${item.product} not found`);
+      const dbProduct = productMap[item.productId];
+      if (!dbProduct) throw new Error(`Product ${item.productId} not found`);
       return {
         product: dbProduct.id,
         name: dbProduct.name,
