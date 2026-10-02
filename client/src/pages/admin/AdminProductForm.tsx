@@ -56,6 +56,45 @@ export default function AdminProductForm() {
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
+    setSaving(true);
+    try {
+      let imageUrl = formData.image;
+      if (imageFile) {
+        const formDataObj = new FormData();
+        formDataObj.append("image", imageFile);
+        const { data } = await api.post("/upload", formDataObj);
+        imageUrl = data.url;
+      }
+
+      if (!imageUrl) {
+        toast.error("Please upload an image for the product.");
+        setSaving(false);
+        return;
+      }
+
+      const payload = {
+        ...formData,
+        image: imageUrl,
+        price: parseFloat(formData.price),
+        originalPrice: formData.originalPrice
+          ? parseFloat(formData.originalPrice)
+          : null,
+        stock: Number(formData.stock),
+      };
+
+      if (isEdit) {
+        await api.put(`/products/${id}`, payload);
+        toast.success("Product updated successfully!");
+      } else {
+        await api.post("/products", payload);
+        toast.success("Product added successfully!");
+      }
+      navigate("/admin/products");
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || error.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
