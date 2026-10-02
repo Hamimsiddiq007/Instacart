@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { PlusIcon, EditIcon, XIcon } from "lucide-react";
 import type { Product } from "../../types";
 import Loading from "../../components/Loading";
-import { dummyProducts } from "../../assets/assets";
+import toast from "react-hot-toast";
+import api from "../../config/api";
 
 export default function AdminProducts() {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
@@ -12,10 +13,14 @@ export default function AdminProducts() {
   const [loading, setLoading] = useState(true);
 
   const fetchProducts = async () => {
-    setProducts(dummyProducts);
-    setTimeout(() => {
+    try {
+      const {data} = await api.get("/products");
+      setProducts(data.products);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || error.message);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
   useEffect(() => {
