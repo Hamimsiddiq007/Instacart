@@ -7,6 +7,7 @@ import {
   dummyDashboardOrdersData,
   dummyDeliveryPartnerData,
 } from "../../assets/assets";
+import api from "../../config/api";
 
 export default function AdminOrders() {
   const currency = import.meta.env.VITE_CURRENCY_SYMBOL || "$";
@@ -18,8 +19,14 @@ export default function AdminOrders() {
   const [selectedPartner, setSelectedPartner] = useState("");
 
   const fetchOrders = async () => {
-    setOrders(dummyDashboardOrdersData);
-    setTimeout(() => setLoading(false), 1000);
+    try {
+      const { data } = await api.get("/orders/all");
+      setOrders(data.orders);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchPartners = async () => {
