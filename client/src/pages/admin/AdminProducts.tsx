@@ -35,7 +35,7 @@ export default function AdminProducts() {
     )
       return;
     try {
-      await api.delete(`/products/${id}`);
+      await api.put(`/products/${id}/stock`);
       toast.success("Product marked as out of stock!");
       fetchProducts(); // Refresh products after status change
     } catch (error: any) {

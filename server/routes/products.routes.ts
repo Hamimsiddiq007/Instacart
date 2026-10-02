@@ -1,11 +1,11 @@
 import express from "express";
 import {
   createProduct,
-  deleteProduct,
   getFlashDeals,
   getProduct,
   getProducts,
   updateProduct,
+  updateStock,
 } from "../controllers/products.controller.js";
 import auth from "../middlewares/auth.middleware.js";
 import admin from "../middlewares/admin.middleware.js";
@@ -17,6 +17,6 @@ productRouter.get("/", getProducts);
 productRouter.get("/:id", getProduct);
 productRouter.post("/", auth, admin, createProduct);
 productRouter.put("/:id", auth, admin, updateProduct);
-productRouter.delete("/:id", auth, admin, deleteProduct);
+productRouter.put("/:id/stock", auth, admin, updateStock);
 
 export default productRouter;
