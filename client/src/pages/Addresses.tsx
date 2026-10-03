@@ -8,9 +8,8 @@ import { useAuth } from "../context/authContext";
 import api from "../config/api";
 import toast from "react-hot-toast";
 
-const Address = () => {
-
-  const {updateUser} = useAuth()
+const Addresses = () => {
+  const { updateUser } = useAuth();
 
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,7 +37,7 @@ const Address = () => {
     setShowForm(false);
   };
 
-  const getLocation = (retries = 3): Promise<{lat: number, lng: number}> => {
+  const getLocation = (retries = 3): Promise<{ lat: number; lng: number }> => {
     return new Promise((resolve, reject) => {
       if (!navigator.geolocation) {
         reject(new Error("Geolocation is not supported"));
@@ -51,45 +50,66 @@ const Address = () => {
             resolve({
               lat: position.coords.latitude,
               lng: position.coords.longitude,
-            })
-          }, (error: any) => {
+            });
+          },
+          (error: any) => {
             if (retries > 0) {
               retries--;
               setTimeout(attempt, 1000); // Retry after 1 second
-            }else{
+            } else {
               reject(new Error(error.message || "Unable to retrieve location"));
             }
           },
-      {
-        enableHighAccuracy: false,
-        timeout: 15000,
-        maximumAge: 60000,
-      })
-    }
-    attempt();
-  })
-  }
+          {
+            enableHighAccuracy: false,
+            timeout: 15000,
+            maximumAge: 60000,
+          },
+        );
+      };
+      attempt();
+    });
+  };
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
-    try {
-      const coords = await getLocation();
-      const payload = {...form, ...coords}
 
-      if(editigId){
-        const {data} = await api.put(`/address/${editigId}`, payload);
-        setAddresses(data.addresses);
-        updateUser({addresses: data.addresses});
-        toast.success("Address updated successfully")
-      } else{
-        const {data} = await api.post(`/address`, payload);
-        setAddresses(data.addresses);
-        updateUser({addresses: data.addresses});
-        toast.success("Address added successfully")
+    try {
+      let coords = {
+        lat: 0,
+        lng: 0,
+      };
+
+      try {
+        coords = await getLocation();
+      } catch (error) {
+        console.log("Location unavailable:", error);
       }
+
+      const payload = {
+        ...form,
+        ...coords,
+      };
+
+      if (editigId) {
+        const { data } = await api.put(`/address/${editigId}`, payload);
+
+        setAddresses(data.addresses);
+        updateUser({ addresses: data.addresses });
+
+        toast.success("Address updated successfully");
+      } else {
+        const { data } = await api.post("/address", payload);
+
+        setAddresses(data.addresses);
+        updateUser({ addresses: data.addresses });
+
+        toast.success("Address added successfully");
+      }
+
       resetForm();
     } catch (error: any) {
-      toast.error( error.response?.data?.message || error.message);
+      toast.error(error.response?.data?.message || error.message);
     }
   };
 
@@ -107,13 +127,17 @@ const Address = () => {
   };
 
   useEffect(() => {
-    api.get("/address").then(({data}) => {
-      setAddresses(data.addresses);
-    }).catch((error: any) => {
-      toast.error(error.response?.data?.message || error.message);
-    }).finally(() => {
-      setLoading(false);
-    });
+    api
+      .get("/address")
+      .then(({ data }) => {
+        setAddresses(data.addresses);
+      })
+      .catch((error: any) => {
+        toast.error(error.response?.data?.message || error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -175,4 +199,4 @@ const Address = () => {
   );
 };
 
-export default Address;
+export default Addresses;

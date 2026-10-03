@@ -16,11 +16,11 @@ import AdminDashboard from "./pages/admin/AdminDashboard"
 import AdminProducts from "./pages/admin/AdminProducts"
 import AdminProductForm from "./pages/admin/AdminProductForm"
 import AdminOrders from "./pages/admin/AdminOrders"
-import Address from "./pages/Address"
 import AdminDeliveryPartners from "./pages/admin/AdminDeliveryPartners"
 import DeliveryLogin from "./pages/delivery/DeliveryLogin"
 import DeliveryLayout from "./pages/delivery/DeliveryLayout"
 import DeliveryDashboard from "./pages/delivery/DeliveryDashboard"
+import Addresses from "./pages/Addresses"
 
 
 const App = () => {
@@ -45,7 +45,7 @@ const App = () => {
           <Route path="checkout" element={<Checkout />} />
           <Route path="orders" element={<MyOrders />} />
           <Route path="orders/:id" element={<OrderTracking />} />
-          <Route path="address" element={<Address />} />
+          <Route path="address" element={<Addresses />} />
         </Route>
       </Route>
       {/* Admin routes */}
