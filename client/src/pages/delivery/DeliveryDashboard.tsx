@@ -98,6 +98,17 @@ export default function DeliveryDashboard() {
   const handleComplete = async () => {
     if (!otpModal || !otp) return;
     setSubmitting(true);
+    try {
+      await axios.put(`${API_URL}/delivery/my-deliveries/${otpModal}/complete`, { otp }, getAuthHeader());
+      toast.success("Delivery completed successfully");
+      setOtpModal(null);
+      setOtp("");
+      fetchOrders();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || error.message);
+    } finally{
+      setSubmitting(false);
+    }
   };
 
   const handleCancel = async () => {
