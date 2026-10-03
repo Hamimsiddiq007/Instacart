@@ -35,6 +35,24 @@ export default function AdminDeliveryPartners() {
 
   const handleSubmit = async (e: React.SubmitEvent) => {
     e.preventDefault();
+    setSaving(true);
+    try {
+      await api.post("/admin/delivery-partners", form);
+      toast.success("Delivery partner created successfully");
+      setShowForm(false);
+      setForm({
+        name: "",
+        email: "",
+        password: "",
+        phone: "",
+        vehicleType: "bike",
+      });
+      fetchPartners();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || error.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const toggleActive = async (id: string, isActive: boolean) => {
