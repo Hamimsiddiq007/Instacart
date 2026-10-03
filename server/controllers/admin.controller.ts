@@ -128,7 +128,7 @@ export const assignDeliveryPartner = async (req: Request, res: Response) => {
             where: {id: order!.id},
             data: {
                 deliveryPartnerId: partner!.id,
-                deliveryotp: otp.toString(),
+                deliveryOtp: otp.toString(),
                 status,
                 statusHistory: history,
             }
