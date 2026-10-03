@@ -76,13 +76,11 @@ export const createOrder = async (req: e.Request, res: e.Response) => {
       // Stripe payment link
     }
 
-    res.status(201).json(order);
-
     // Deduct stock
     for (const item of items) {
       await prisma.product.update({
         where: {
-          id: item.product,
+          id: item.productId,
         },
         data: {
           stock: {
@@ -96,11 +94,14 @@ export const createOrder = async (req: e.Request, res: e.Response) => {
     for (const item of items) {
       await inngest.send({
         name: "inventory/stock.updated",
-        data: { productId: item.product },
+        data: { productId: item.productId },
       });
     }
 
     await inngest.send({ name: "order/placed", data: { orderId: order.id } });
+
+    return res.status(201).json(order);
+
   } catch (error) {
     res.status(500).json({ message: "Error creating order" });
   }

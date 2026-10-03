@@ -89,6 +89,14 @@ export default function DeliveryDashboard() {
   const handleUpdateStatus = async (orderId: string, status: string) => {
     try {
       await axios.put(`${API_URL}/delivery/my-deliveries/${orderId}/status`, { status }, getAuthHeader());
+      
+      setOrders((prevOrders) =>
+      prevOrders.map((order) =>
+        order.id === orderId
+          ? { ...order, status }
+          : order
+      )
+    );
       toast.success(`Status updated to ${status}`);
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to update status");

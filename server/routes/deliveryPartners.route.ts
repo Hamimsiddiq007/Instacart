@@ -6,6 +6,7 @@ import {
   getMyDeliveries,
   loginDeliveryPartner,
   updateLiveLocation,
+  updateOrderStatus,
 } from "../controllers/delivertPartners.controller.js";
 import deliveryAuth from "../middlewares/deliveryPartner.middleware.js";
 
@@ -22,6 +23,11 @@ deliveryPartnersRouter.get(
   "/my-deliveries/:id",
   deliveryAuth,
   getDeliveryDetails,
+);
+deliveryPartnersRouter.put(
+  "/my-deliveries/:id/status",
+  deliveryAuth,
+  updateOrderStatus
 );
 deliveryPartnersRouter.put(
   "/my-deliveries/:id/complete",
