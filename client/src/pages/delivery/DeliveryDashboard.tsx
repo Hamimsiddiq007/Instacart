@@ -87,17 +87,17 @@ export default function DeliveryDashboard() {
 
 
   const handleUpdateStatus = async (orderId: string, status: string) => {
-    console.log(orderId, status);
+    try {
+      await axios.put(`${API_URL}/delivery/my-deliveries/${orderId}/status`, { status }, getAuthHeader());
+      toast.success(`Status updated to ${status}`);
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to update status");
+    }
   };
 
   const handleComplete = async () => {
     if (!otpModal || !otp) return;
     setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-      setOtpModal(null);
-      setOtp("");
-    }, 1000);
   };
 
   const handleCancel = async () => {
