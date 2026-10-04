@@ -1,6 +1,7 @@
 import e from "express";
 import { prisma } from "../config/prisma.js";
 import { inngest } from "../inngest/index.js";
+import Stripe from "stripe";
 
 // Create orders
 export const createOrder = async (req: e.Request, res: e.Response) => {
@@ -73,7 +74,27 @@ export const createOrder = async (req: e.Request, res: e.Response) => {
     });
 
     if (paymentMethod === "card") {
-      // Stripe payment link
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY! as string);
+      const session = await stripe.checkout.sessions.create({
+        success_url: `${req.headers.origin}/orders?clearCart=true`,
+        cancel_url: `${req.headers.origin}/checkout`,
+        line_items: [
+          {
+            price_data: {
+              currency: "usd",
+              product_data: {
+                name: "Payment Groceries"
+              },
+              unit_amount: Math.round(total * 100),
+            },
+            quantity: 1,
+          },
+        ],
+        mode: "payment",
+        metadata: {orderId: order.id},
+      });
+
+      return res.status(200).json({ url: session.url });
     }
 
     // Deduct stock
@@ -101,7 +122,6 @@ export const createOrder = async (req: e.Request, res: e.Response) => {
     await inngest.send({ name: "order/placed", data: { orderId: order.id } });
 
     return res.status(201).json(order);
-
   } catch (error) {
     res.status(500).json({ message: "Error creating order" });
   }
