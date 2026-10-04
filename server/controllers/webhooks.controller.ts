@@ -1,5 +1,7 @@
 import e from "express";
 import Stripe from "stripe";
+import { prisma } from "../config/prisma.js";
+import { inngest } from "../inngest/index.js";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -24,9 +26,48 @@ export const stripeWebhook = async (request: e.Request, response: e.Response) =>
   // Handle the event
   switch (event!.type) {
     case 'payment_intent.succeeded':
-      const paymentIntent = event.data.object;
-      // Then define and call a method to handle the successful payment intent.
-      // handlePaymentIntentSucceeded(paymentIntent);
+      const paymentIntent = event.data.object as Stripe.PaymentIntent;
+      const paymentIntentId = paymentIntent.id;
+
+      const session = await stripe.checkout.sessions.list({
+        payment_intent: paymentIntentId,
+      })
+
+      const {orderId} = session.data[0].metadata as any;
+
+      const paidOrder = await prisma.order.update({
+        where: { id: orderId },
+        data: { isPaid: true },
+      });
+
+      // Deduct stock
+      const items = (Array.isArray(paidOrder.items)) ? paidOrder.items : [] as any[];
+    for (const item of items) {
+      await prisma.product.update({
+        where: {
+          id: item.productId,
+        },
+        data: {
+          stock: {
+            decrement: item.quantity,
+          },
+        },
+      });
+    }
+
+    if (paidOrder) {
+        await inngest.send({
+            name: "order/placed",
+            data: { orderId }
+        });
+    }
+
+    for (const item of items) {
+        await inngest.send({
+            name: "inventory/stock.updated",
+            data: { productId: item.productId }
+        })
+    }
       break;
     case 'payment_method.attached':
       const paymentMethod = event.data.object;
