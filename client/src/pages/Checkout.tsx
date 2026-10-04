@@ -59,7 +59,7 @@ const Checkout = () => {
         })),
         shippingAddress: address,
         paymentMethod,
-      }
+      };
       const { data } = await api.post("/orders", orderData);
       console.log(data)
 
@@ -95,7 +95,7 @@ const Checkout = () => {
         lng: defaultAddr?.lng,
       });
     }
-  });
+  }, [user]);
 
   if (items.length === 0) {
     return (
