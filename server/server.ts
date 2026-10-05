@@ -20,8 +20,6 @@ app.post("/api/stripe", express.raw({type: 'application/json'}), stripeWebhook);
 app.use(cors());
 app.use(express.json());
 
-const port = process.env.PORT || 5000;
-
 app.get("/", (req: Request, res: Response) => {
   res.send("Server is Live!");
 });
@@ -47,6 +45,4 @@ app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   res.status(500).json({ message: error.message });
 });
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+export default app;
